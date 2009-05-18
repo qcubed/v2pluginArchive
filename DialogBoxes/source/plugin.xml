@@ -7,25 +7,25 @@
 	<platform_version>1.1</platform_version>
 	<author name="Alex Weinstein, a.k.a. alex94040" email="alex94040 [at] yahoo [dot] com" />
 	<files>
-		<file type="control" filename="QPromptDialog.class.php" />
-		<file type="control" filename="QTextBoxPromptDialog.class.php" />
-		<file type="control" filename="QRadioButtonPromptDialog.class.php" />
-		<file type="control" filename="QConfirmationDialog.class.php" />
+		<file type="control" filename="includes/QPromptDialog.class.php" />
+		<file type="control" filename="includes/QTextBoxPromptDialog.class.php" />
+		<file type="control" filename="includes/QRadioButtonPromptDialog.class.php" />
+		<file type="control" filename="includes/QConfirmationDialog.class.php" />
 
-		<file type="misc_include" filename="QConfirmationDialog.tpl.php" />
-		<file type="misc_include" filename="QRadioButtonPromptDialog.tpl.php" />
-		<file type="misc_include" filename="QTextBoxPromptDialog.tpl.php" />
+		<file type="misc_include" filename="includes/QConfirmationDialog.tpl.php" />
+		<file type="misc_include" filename="includes/QRadioButtonPromptDialog.tpl.php" />
+		<file type="misc_include" filename="includes/QTextBoxPromptDialog.tpl.php" />
 
-		<file type="example" filename="more_dialog_boxes.php" />
-		<file type="example" filename="more_dialog_boxes.tpl.php" />
+		<file type="example" filename="example/more_dialog_boxes.php" />
+		<file type="example" filename="example/more_dialog_boxes.tpl.php" />
 	</files>
 	<includes>
-		<include_files classname="QPromptDialog" filename="QPromptDialog.class.php" />
-		<include_files classname="QTextBoxPromptDialog" filename="QTextBoxPromptDialog.class.php" />
-		<include_files classname="QRadioButtonPromptDialog" filename="QRadioButtonPromptDialog.class.php" />
-		<include_files classname="QConfirmationDialog" filename="QConfirmationDialog.class.php" />
+		<include_files classname="QPromptDialog" filename="includes/QPromptDialog.class.php" />
+		<include_files classname="QTextBoxPromptDialog" filename="includes/QTextBoxPromptDialog.class.php" />
+		<include_files classname="QRadioButtonPromptDialog" filename="includes/QRadioButtonPromptDialog.class.php" />
+		<include_files classname="QConfirmationDialog" filename="includes/QConfirmationDialog.class.php" />
 	</includes>
 	<examples>
-		<example filename="more_dialog_boxes.php" description="Pre-built Dialog Boxes: Confirmations and Prompts" />
+		<example filename="example/more_dialog_boxes.php" description="Pre-built Dialog Boxes: Confirmations and Prompts" />
 	</examples>
 </plugin>
