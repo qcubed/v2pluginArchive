@@ -20,7 +20,7 @@ class QRadioButtonPromptDialog extends QPromptDialog {
 		parent::__construct($objParentObject, $formFirstActionCallback, $strControlId);
 		
 		// Feel free to override this template with your own
-		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/QRadioButtonPromptDialog.tpl.php";
+		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/includes/QRadioButtonPromptDialog.tpl.php";
 		
 		$this->radOptions = new QRadioButtonList($this);
 	}

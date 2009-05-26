@@ -21,7 +21,7 @@ class QTextBoxPromptDialog extends QPromptDialog {
 		parent::__construct($objParentObject, $formCallbackMethodOnContinue, $strControlId);
 		
 		// Feel free to override this template with your own
-		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/QTextBoxPromptDialog.tpl.php";
+		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/includes/QTextBoxPromptDialog.tpl.php";
 				
 		$this->txtTextbox = new QTextBox($this);
 		

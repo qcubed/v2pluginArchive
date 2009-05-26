@@ -10,7 +10,7 @@ class QConfirmationDialog extends QPromptDialog {
 		parent::__construct($objParentObject, $formFirstActionCallback, $strControlId);
 		
 		// Feel free to override this template with your own
-		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/QConfirmationDialog.tpl.php";
+		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/includes/QConfirmationDialog.tpl.php";
 	}
 
 	public function first_action_click() {
