@@ -9,9 +9,6 @@ FOR /F "TOKENS=1,2 DELIMS=/ eol=/" %%A IN ('echo %CDATE%') DO SET dd=%%B
 FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('echo %CDATE%') DO SET yyyy=%%B
 SET date=%yyyy%_%mm%_%dd%
 
-@echo Date: %date%
-
-
 cp -r ../source ../releases
 cd ../releases/source
 
