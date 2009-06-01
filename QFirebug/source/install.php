@@ -19,7 +19,7 @@ $components[] = new QPluginExampleFile("example/qfirebug.php");
 $components[] = new QPluginExampleFile("example/qfirebug.tpl.php");
 $components[] = new QPluginExampleFile("example/qfirebug.png");
 
-$components[] = new QPluginIncludedClass("QFirebug", "QFirebug.class.php");
+$components[] = new QPluginIncludedClass("QFirebug", "includes/QFirebug.class.php");
 
 $components[] = new QPluginExample("example/qfirebug.php", "Introduction to Debugging with QFirebug");
 
