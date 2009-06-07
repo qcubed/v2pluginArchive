@@ -9,7 +9,7 @@
 		a subclass of <b>QDialogBox</b> - you can easily build one yourself after you inspect these pre-built
 		ones, but these ones can save you time.<br/><br/>
 
-		<b>QConfirmationDialog</b> is a dialog box that displays a confirmation. You couldd use it for
+		<b>QConfirmationDialog</b> is a dialog box that displays a confirmation. You could use it for
 		something like an "are you sure you want to delete this record" dialog. When you instantiate this control,
 		you pass in the name of the QForm function that you want to be called when (if) the user presses "proceed".
 		You can, if you'd like, also provide a function handler for when the user presses "cancel", but if you
