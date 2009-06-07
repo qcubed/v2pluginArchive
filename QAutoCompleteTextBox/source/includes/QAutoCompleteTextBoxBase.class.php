@@ -37,7 +37,7 @@
 		public function __construct($objParentObject, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
 			
-			$this->AddJavascriptFile("jquery.ui-1.5.3/jquery-1.2.6.js");
+			$this->AddJavascriptFile(__JQUERY_BASE__);
 
 			$this->AddPluginJavascriptFile("QAutoCompleteTextBox", "jquery.autocomplete.js");
 			$this->AddPluginJavascriptFile("QAutoCompleteTextBox", "jquery.bgiframe.js");
