@@ -2,8 +2,8 @@
 
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QJqDock";
-$objPlugin->strDescription = 'Transform a set of images into a Mac-like Dock menu,' . 
-	'horizontal or vertical, with icons that expand on rollover.';
+$objPlugin->strDescription = 'Transform a set of images into a Mac-like Dock menu, ' . 
+	'horizontal or vertical, with icons that grow when you roll over them with the mouse.';
 $objPlugin->strVersion = "0.1";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
