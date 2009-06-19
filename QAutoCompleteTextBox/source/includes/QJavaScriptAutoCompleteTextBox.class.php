@@ -38,7 +38,7 @@
 			$strJavascriptArray = "";
 			if (is_array($this->strItemsArray)) {
 				foreach ($this->strItemsArray as $strItem) {
-					$arrOptions[] = "'" . QApplication::HtmlEntities($strItem) . "'";
+					$arrOptions[] = "'" . addslashes(QApplication::HtmlEntities($strItem)) . "'";
 				}
 
 				if(count($arrOptions) > 0) {
