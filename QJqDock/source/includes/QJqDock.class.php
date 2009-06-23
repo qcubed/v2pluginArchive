@@ -25,7 +25,7 @@ class QJqDock extends QPanel {
 
 	private function setJavaScripts() {
 		$this->AddJavascriptFile(__JQUERY_BASE__);
-		$this->AddPluginJavascriptFile("QjQDock", "jquery.jqDock.min.js");
+		$this->AddPluginJavascriptFile("QJqDock", "jquery.jqDock.min.js");
 		/*
 		$this->AddPluginCssFile("QjQDock", "jqDock.css");
 		if (QApplication::IsBrowser(QBrowserType::InternetExplorer)) {
