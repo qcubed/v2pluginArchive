@@ -23,7 +23,7 @@ $components[] = new QPluginJsFile("js");
 $components[] = new QPluginExampleFile("example/fckeditor.php");
 $components[] = new QPluginExampleFile("example/fckeditor.tpl.php");
 
-$components[] = new QPluginIncludedClass("QFCKEditor", "includes2/QFCKEditor.class.php");
+$components[] = new QPluginIncludedClass("QFCKEditor", "includes/QFCKEditor.class.php");
 
 $components[] = new QPluginExample("example/fckeditor.php", "Rich Text Editing with QFCKEditor");
 
