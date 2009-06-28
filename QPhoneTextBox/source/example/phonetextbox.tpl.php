@@ -2,7 +2,7 @@
 	<?php $this->RenderBegin(); ?>
 
 	<div class="instructions">
-		<div class="instruction_title">QPhoneTextBox: Formatting and Validation of Phone Numbers</div>
+		<h1 class="instruction_title">QPhoneTextBox: Formatting and Validation of Phone Numbers</h1>
 
 		<b>QPhoneTextBox</b> is a simple extension of the <b>QTextBox</b> control that 
 		allows you to easily validate and format the phone numbers that users provide. 

@@ -2,14 +2,15 @@
 	<?php $this->RenderBegin(); ?>
 
 	<div class="instructions">
-		<div class="instruction_title">Rich Text Editing with QFCKEditor</div>
+		<h1 class="instruction_title">Rich Text Editing with QFCKEditor</h1>
 
-		QCubed comes with a built-in, integrated open-source rich-text WYSIWYG
-		editor <a href="http://www.fckeditor.net">FCKEditor</a>. The idea here
-		is "what you see is what you get": the user can do a little bit of
-		text processing right inside of your application: make text bold,
-		introduce bullets, etc - all with an intuitive point-and-click interface,
-		a-la Microsoft Word, and without security risk for your server.<br/><br/>
+		This plugin offers an integrated open-source rich-text WYSIWYG
+		editor <a href="http://www.fckeditor.net">FCKEditor</a> to be used as a control
+		inside QCubed. The idea here is "what you see is what you get": the user
+		can do a little bit of text processing right inside of your application:
+		make text bold, introduce bullets, etc - all with an intuitive
+		point-and-click interface, a-la Microsoft Word, and without security
+		risk for your server.<br/><br/>
 		
 		To use it, just instantiate a <b>QFCKEditor</b> control the same way you
 		would a <b>QTextBox</b>. Set its width and height, and you're good to go.

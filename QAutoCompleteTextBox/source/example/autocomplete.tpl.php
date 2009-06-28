@@ -2,7 +2,7 @@
 	<?php $this->RenderBegin(); ?>
 
 	<div class="instructions">
-		<div class="instruction_title">Auto-complete Textbox Controls</div>
+		<h1 class="instruction_title">Auto-complete Textbox Controls</h1>
 
 		Frequently, you have a need to allow the user to type in a value into a textbox,
 		but there are some pre-set values that you'd like the user to pick from. One way

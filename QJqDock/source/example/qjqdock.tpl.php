@@ -1,8 +1,8 @@
 <?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/header.inc.php'); ?>
-    <?php $this->RenderBegin(); ?>
+		<?php $this->RenderBegin(); ?>
 
-    <div class="instructions">
-        <div class="instruction_title">QJqDock</div>
+		<div class="instructions">
+		<h1 class="instruction_title">QJqDock</h1>
 
 		<p>The Dock - as anyone familiar with a Mac will know - is a set of
 		iconic images that expand when rolled over with the cursor, and usually
@@ -23,12 +23,12 @@
 		control the style of the Dock.</p>
      </div>
 
-    <div id="dockmenu" style="height:300px">
-    <?php
-        $this->dckMenuHorizontal->Render();
-        $this->dckMenuVertical->Render();
-    ?>
-    </div>
+		<div id="dockmenu" style="height:300px">
+		<?php
+				$this->dckMenuHorizontal->Render();
+				$this->dckMenuVertical->Render();
+		?>
+		</div>
 	
 	<?php $this->RenderEnd(); ?>
 <?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/footer.inc.php'); ?>
