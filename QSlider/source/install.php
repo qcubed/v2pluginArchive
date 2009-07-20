@@ -2,7 +2,7 @@
 
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QSlider";
-$objPlugin->strDescription = 'Plugin that implement a basic horizontal slider with tick marks & that is, with predefined intervals.';
+$objPlugin->strDescription = 'A jQuery-based slider with tick marks that allows the user to pick a value from a pre-defined range.';
 $objPlugin->strVersion = "0.1";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
@@ -28,9 +28,9 @@ $components[] = new QPluginExampleFile("example/qslider.tpl.php");
 
 $components[] = new QPluginIncludedClass("QSlider", "includes/QSlider.class.php");
 
-$components[] = new QPluginExample("example/qslider.php", "Example to use a Horizontal QSlider");
+$components[] = new QPluginExample("example/qslider.php", "QSlider: jQuery-based Slider Control");
 
 $objPlugin->addComponents($components);
 $objPlugin->install();
-	
+
 ?>

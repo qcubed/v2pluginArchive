@@ -1,31 +1,29 @@
 <?php
 
 class QSlider extends QControl  {
-
-	protected $strJavaScripts = 'jquery.dimensions.js,ui.mouse.js,ui.slider.js';
-
-	public $CssClassHandle;
+	protected $strCssClassHandle;	
 	protected $intMinValue;
 	protected $intMaxValue;
 	protected $intSteps;
 	protected $intStartValue;
-	public $Axis;
 
-	public $txtSliderValue;
-
+	// the optional textbox that displays the current value of the slider
+    public $txtSliderValue;
+	
 	public function __construct($objParentObject, $strControlId = null) {
-		if ($objParentObject)
-		parent::__construct($objParentObject, $strControlId);
+		if ($objParentObject) {
+			parent::__construct($objParentObject, $strControlId);
+		}
 
 		$this->intMinValue = 1;
 		$this->intMaxValue = 10;
 		$this->intSteps = 10;
-		$this->Axis = "horizontal";
 			
 		$this->txtSliderValue = new QTextBox($objParentObject);
 		$this->txtSliderValue->Width = '25';
-		$this->txtSliderValue->ReadOnly = TRUE;
-		$this->txtSliderValue->Display = FALSE;
+		$this->txtSliderValue->ReadOnly = true;
+		$this->txtSliderValue->Display = QDisplayStyle::None;
+
 		$this->setFiles();
 	}
 
@@ -38,33 +36,39 @@ class QSlider extends QControl  {
 		$this->AddPluginCssFile("QSlider", "slider.css");
 		/*if (QApplication::IsBrowser(QBrowserType::InternetExplorer)) {
 			$this->AddPluginCssFile("QSlider", "slider_ie.css");
-			}*/
-
+		}*/
 	}
 
 	protected function GetControlHtml() {
-
-		$strHtml = sprintf('<div id="slider_%s" class="%s">
-									<div class="%s" style=""/></div></div>',
-		$this->ControlId,$this->CssClass,$this->CssClassHandle);
+		$strHtml = sprintf('<div id="slider_%s" class="%s"><div class="%s" style=""/></div></div>',
+			$this->ControlId,
+			$this->CssClass,
+			$this->strCssClassHandle);
 
 		$strSliderValue = $this->txtSliderValue->Render(false);
 	
-		$this->intStartValue = ($this->intStartValue)?$this->intStartValue:$this->intMinValue;
+		$this->intStartValue = ($this->intStartValue) ? $this->intStartValue : $this->intMinValue;
 
 		$strJsSlider = sprintf('
-			  $(document).ready(function(){
-			    $("#slider_%s").slider({ 
-				      steps: %s,
-					  minValue: %s,
-					  maxValue: %s,
-					  startValue: %s,
-					  axis: \'%s\',
-					  slide: function(e,ui) { 
-					     $("#%s").val(ui.values); 
-					  }
-					   });
-			  })',$this->ControlId,$this->intSteps,$this->intMinValue,$this->intMaxValue,$this->intStartValue,$this->Axis,$this->txtSliderValue->ControlId);
+			$(document).ready(function(){
+				$("#slider_%s").slider({ 
+					steps: %s,
+					minValue: %s,
+					maxValue: %s,
+					startValue: %s,
+					axis: \'%s\',
+					slide: function(e,ui) { 
+						$("#%s").val(ui.values); 
+					}
+				});
+			})',
+			$this->ControlId,
+			$this->intSteps,
+			$this->intMinValue,
+			$this->intMaxValue,
+			$this->intStartValue,
+			'horizontal',
+			$this->txtSliderValue->ControlId);
 			
 		QApplication::ExecuteJavaScript($strJsSlider);
 		return $strHtml . $strSliderValue;
@@ -75,7 +79,6 @@ class QSlider extends QControl  {
 	}
 
 	public function ParsePostData() {
-
 		return true;
 	}
 
@@ -86,8 +89,11 @@ class QSlider extends QControl  {
 	public function __get($strName) {
 		switch ($strName) {
 			// APPEARANCE
-			case "Text": return $this->txtSliderValue->Text;
-
+			case "Value":
+			case "Text":
+				return $this->txtSliderValue->Text;
+			case "CssClassHandle":
+				return $this->strCssClassHandle;
 			default:
 				try {
 					return parent::__get($strName);
@@ -99,9 +105,18 @@ class QSlider extends QControl  {
 	}
 
 	public function __set($strName, $mixValue) {
-
 		switch ($strName) {
 			// APPEARANCE
+
+			case "CssClassHandle":
+				try {
+					$this->strCssClassHandle = QType::Cast($mixValue, QType::String);
+					break;
+				} catch (QInvalidCastException $objExc) {
+					$objExc->IncrementOffset();
+					throw $objExc;
+				}				
+			
 			case "MinValue":
 				try {
 					$this->intMinValue = QType::Cast($mixValue, QType::Integer);
@@ -129,7 +144,7 @@ class QSlider extends QControl  {
 					throw $objExc;
 				}
 				
-			case "StartValue":
+			case "InitialValue":
 				try {
 					$this->intStartValue = QType::Cast($mixValue, QType::Integer);
 					$this->txtSliderValue->Text = QType::Cast($mixValue, QType::Integer);
@@ -139,7 +154,7 @@ class QSlider extends QControl  {
 					throw $objExc;
 				}
 				
-			case "DisplayValueBox":
+			case "ShowValueTextBox":
 				try {					
 					$this->txtSliderValue->Display = QType::Cast($mixValue, QType::Boolean);
 					break;
@@ -157,7 +172,6 @@ class QSlider extends QControl  {
 				}
 				break;
 		}
-
 	}
 }
 ?>
