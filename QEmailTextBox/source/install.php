@@ -6,7 +6,7 @@ $objPlugin->strDescription = 'A sublcass of QTextBox, this control validates val
 $objPlugin->strVersion = "0.1";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia, a.k.a. enzo";
-$objPlugin->strAuthorEmail ="enzo [at] anexusit [dot] com";
+$objPlugin->strAuthorEmail = "enzo [at] anexusit [dot] com";
 
 $components = array();
 
@@ -17,9 +17,9 @@ $components[] = new QPluginExampleFile("example/emailtextbox.tpl.php");
 
 $components[] = new QPluginIncludedClass("QEmailTextBox","includes/QEmailTextBox.class.php");
 
-$components[] = new QPluginExample("example/emailtextbox.php", "QEmailTextBox: validate the email entry");
+$components[] = new QPluginExample("example/emailtextbox.php", "QEmailTextBox: Validate Email Addresses");
 
 $objPlugin->addComponents($components);
 $objPlugin->install();
-	
+
 ?>

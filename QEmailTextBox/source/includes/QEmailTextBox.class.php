@@ -1,21 +1,13 @@
 <?
-	/*********************************************************
-	
-	EmailTextBox	
-	
+	/*********************************************************	
+	QEmailTextBox		
 	A subclass of QTextBox. 
-
-	Contributors:	enzo
-	
-	This text box validates  method overridden -- Validate will also ensure that the Text is a valid email address	
-	
+	Contributors:	enzo	
+	This text box validates  method overridden -- Validate will also ensure that the Text is a valid email address		
 	**********************************************************/
 	
 	
 	class QEmailTextBox extends QTextBox {
-		//////////
-		// Methods
-		//////////
 		public function Validate() {
 			if (parent::Validate()) {
 				if ($this->strText != "") {
@@ -29,7 +21,7 @@
 			return false;
 
 			$this->strValidationError = "";
-			return true;
+			return true;		
+		}
 	}
-}
 ?>
