@@ -3,11 +3,11 @@
 
     <div class="instructions">
         <div class="instruction_title">QGoogleMap</div>
-        <p><b>QGoogleMap</b> will draw a Google Map using the provided API key. An API key needs to be generated for the domain you plan to use this control on.
-        For this reason, the example pulls from a global __GOOGLE_MAP_KEY__. I recommend defining your API key in your QCubed configuration file.</p>
+        <p><b>QGoogleMap</b> will draw a Google Map using the provided API key. An API key needs to be generated for the domain you plan to use this control on.</p>
         <p><b>Attributes:</b></p>
         <ul>
             <li>AddAddress() takes three parameters - Address, Info Window Text, Menu Link Text</li>
+            <li>MapKey: STRING Default = </li>
             <li>MapWidth: INTEGER Default = 500</li>
             <li>MapHeight: INTEGER Default = 300</li>
             <li>MapZoom: INTEGER Default = 13</li>
@@ -22,6 +22,6 @@
         </ul>
     </div>
 	<?php $this->objMap->Render(); ?>
-			
+
 	<?php $this->RenderEnd(); ?>
-<?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/footer.inc.php'); ?> 
+<?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/footer.inc.php'); ?>
