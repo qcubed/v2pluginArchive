@@ -12,7 +12,7 @@ class QGoogleMapExample extends QForm {
 		$this->objMap->IconStyle = 'HOUSE';
 		$this->objMap->MapType = TRUE;
 		$this->objMap->ContinuousZoom = TRUE;
-		$this->objMap->Inset = TRUE;
+		$this->objMap->MapInset = TRUE;
 		$this->objMap->AddAddress("1600 Pennsylvania Avenue NW Washington, DC 20500", "This is the White House, where America's president lives.", "The White House");
 		$this->objMap->AddAddress("E Capitol St NE & 1st St NE 20001 ", "This is the Capitol Building where laws are made and money is wasted.", "The Capitol Building");
 	}
