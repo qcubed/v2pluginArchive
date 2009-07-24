@@ -551,12 +551,12 @@ class QGoogleMap extends QControl {
 	 * @return: string
 	 **/
 	public function GetMapMenu() {
-		$ret = "<ul id=\"map_menu\">/n";
+		$ret = "<ul id=\"map_menu\"> \n";
 		$loop = count($this->_AddressArr);
 		for ($i=0; $i<$loop; $i++) {
 			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapMenu[$i]}</a></li>\n";
 		}
-		$ret = "</ul>/n";
+		$ret .= "</ul> \n";
 		return $ret;
 	}
 
