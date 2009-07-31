@@ -7,7 +7,11 @@ class QGoogleMap extends QPanel {
 	 *	@var	string
 	 **/
 	protected $_MapKey;
-
+	/**
+	 *	Is data provided by a GPS Sensor?
+	 *	@var	boolean
+	 **/	
+	protected $_MapSensor = FALSE;
 	/**
 	 *	Default Map Sizes
 	 *	@var	int
@@ -379,6 +383,17 @@ class QGoogleMap extends QPanel {
 					throw $objExc;
 				}
 
+				/**
+				 *	Set Whether a GPS Sensor is used or not.
+				 */
+			case 'MapSensor' :
+				try {
+					$this->_MapSensor = QType::Cast($mixValue, QType::Boolean);
+					break;
+				} catch (QInvalidCastException $objExc) {
+					$objExc->IncrementOffset();
+					throw $objExc;
+				}
 
 			default:
 				try {
@@ -545,7 +560,7 @@ class QGoogleMap extends QPanel {
 	 *	@return: string (The HTML to call the Google Map API)
 	 **/
 	public function GetAPIHTML() {
-		return "<script type=\"text/javascript\" src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key={$this->_MapKey}\"></script>\n";
+		return "<script type=\"text/javascript\" src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;sensor={$this->_MapSensor}&amp;key={$this->_MapKey}\"></script>\n";
 	}
 
 	/**
