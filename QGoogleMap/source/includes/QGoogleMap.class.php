@@ -1,6 +1,6 @@
 <?php
 
-class QGoogleMap extends QControl {
+class QGoogleMap extends QPanel {
 
 	/**
 	 *	Google Map API Key
@@ -396,9 +396,9 @@ class QGoogleMap extends QControl {
 	 **/
 	public function AddAddress($address, $info = null, $str = null) {
 		$this->_Index++;
-		$this->_AddressArr[$this->_Index] = $address;
-		$this->_InfoWindowTextArr[$this->_Index] = $info;
-		$this->_MapMenu[$this->_Index] = $str;
+		$this->_AddressArr[$this->_Index] = htmlentities($address);
+		$this->_InfoWindowTextArr[$this->_Index] = htmlentities($info);
+		$this->_MapMenu[$this->_Index] = htmlentities($str);
 	}
 
 	/**
@@ -423,18 +423,19 @@ class QGoogleMap extends QControl {
 
 		# start of JS
 		$ret .= "<script type=\"text/javascript\">\n";
+		$ret .= "<![CDATA[\n";
 		$ret .= "var gmarkers = [];\n";
 		$ret .= "var address = [];\n";
 		$ret .= "var points = [];\n";
-			
-		$ret .= "if(GBrowserIsCompatible()) { \n";
-		$ret .= "	var map = new GMap2(document.getElementById('map_canvas')); \n";
+
+		$ret .= "if(GBrowserIsCompatible()) {\n";
+		$ret .= "	var map = new GMap2(document.getElementById('map_canvas'));\n";
 
 		# handle map continuous zooming
-		$ret .= ($this->_ContinuousZoom==TRUE)?"	map.enableContinuousZoom(); \n":"";
+		$ret .= ($this->_ContinuousZoom==TRUE)?"	map.enableContinuousZoom();\n":"";
 
 		# handle map double click zooming
-		$ret .= ($this->_DoubleClickZoom==TRUE)?"	map.enableDoubleClickZoom(); \n":"";
+		$ret .= ($this->_DoubleClickZoom==TRUE)?"	map.enableDoubleClickZoom();\n":"";
 
 		# handle map controls
 		$mapCtrl = "";
@@ -444,17 +445,17 @@ class QGoogleMap extends QControl {
 				break;
 
 			case 'SMALL_PAN_ZOOM':
-				$mapCtrl = "map.addControl(new GSmallMapControl()); \n";
+				$mapCtrl = "map.addControl(new GSmallMapControl());\n";
 				break;
 
 			case 'LARGE_PAN_ZOOM':
-				$mapCtrl = "map.addControl(new GLargeMapControl()); \n";
+				$mapCtrl = "map.addControl(new GLargeMapControl());\n";
 				break;
 
 			case 'SMALL_ZOOM':
-				$mapCtrl = "map.addControl(new GSmallZoomControl()); \n";
+				$mapCtrl = "map.addControl(new GSmallZoomControl());\n";
 				break;
-					
+
 			default;
 			break;
 
@@ -462,26 +463,26 @@ class QGoogleMap extends QControl {
 		$ret .= "	$mapCtrl";
 
 		# handle map scale (mi/km)
-		$ret .= ($this->_MapScale==TRUE)?"	map.addControl(new GScaleControl()); \n":"";
+		$ret .= ($this->_MapScale==TRUE)?"	map.addControl(new GScaleControl());\n":"";
 
 		# handle map type (map/satellite/hybrid)
-		$ret .= ($this->_MapType==TRUE)?"	map.addControl(new GMapTypeControl()); \n":"";
+		$ret .= ($this->_MapType==TRUE)?"	map.addControl(new GMapTypeControl());\n":"";
 
 		# handle map inset
-		$ret .= ($this->_MapInset==TRUE)?"	map.addControl(new GOverviewMapControl()); \n":"";
+		$ret .= ($this->_MapInset==TRUE)?"	map.addControl(new GOverviewMapControl());\n":"";
 
-		$ret .= "	var geocoder = new GClientGeocoder(); \n";
-		$ret .= "	var icon = new GIcon(); \n";
-		$ret .= "	icon.image = 'http://google.webassist.com/google/markers/$dir/$color.png'; \n";
-		$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png'; \n";
-		$ret .= "	icon.iconSize = new GSize($icon_w,$icon_h); \n";
-		$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h); \n";
-		$ret .= "	icon.iconAnchor = new GPoint($icon_anchr_w,$icon_anchr_h); \n";
-		$ret .= "	icon.infoWindowAnchor = new GPoint($info_win_anchr_w,$info_win_anchr_h); \n";
-		$ret .= "	icon.printImage = 'http://google.webassist.com/google/markers/$dir/$color.gif'; \n";
-		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png'; \n";
+		$ret .= "	var geocoder = new GClientGeocoder();\n";
+		$ret .= "	var icon = new GIcon();\n";
+		$ret .= "	icon.image = 'http://google.webassist.com/google/markers/$dir/$color.png';\n";
+		$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png';\n";
+		$ret .= "	icon.iconSize = new GSize($icon_w,$icon_h);\n";
+		$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h);\n";
+		$ret .= "	icon.iconAnchor = new GPoint($icon_anchr_w,$icon_anchr_h);\n";
+		$ret .= "	icon.infoWindowAnchor = new GPoint($info_win_anchr_w,$info_win_anchr_h);\n";
+		$ret .= "	icon.printImage = 'http://google.webassist.com/google/markers/$dir/$color.gif';\n";
+		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png';\n";
 		$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
-		$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png'; \n\n";
+		$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
 
 		# loop set address(es)
 		for ($i=$cnt_add-1; $i>=0; $i--) {
@@ -533,6 +534,7 @@ class QGoogleMap extends QControl {
 		$ret .= "   } /*endif*/\n";
 		$ret .= "} /*end function */\n";
 
+		$ret .= "]]>\n";
 		$ret .= "</script>\n";
 
 		return $ret;
@@ -551,12 +553,12 @@ class QGoogleMap extends QControl {
 	 * @return: string
 	 **/
 	public function GetMapMenu() {
-		$ret = "<ul id=\"map_menu\"> \n";
+		$ret = "<ul id=\"map_menu\">\n";
 		$loop = count($this->_AddressArr);
 		for ($i=0; $i<$loop; $i++) {
 			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapMenu[$i]}</a></li>\n";
 		}
-		$ret .= "</ul> \n";
+		$ret .= "</ul>\n";
 		return $ret;
 	}
 
@@ -565,7 +567,13 @@ class QGoogleMap extends QControl {
 	 * @return: string (The Google Map)
 	 **/
 	public function GetControlHtml() {
-		return sprintf('%s %s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript">window.onunload = function() { GUnload(); }</script>',$this->GetAPIHTML(),$this->GetMapMenu(),$this->_MapWidth,$this->_MapHeight,$this->BuildJS());
+		return sprintf('%s %s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript"><![CDATA[ window.onunload = function() { GUnload(); } ]]></script>',
+						$this->GetAPIHTML(),
+						$this->GetMapMenu(),
+						$this->_MapWidth,
+						$this->_MapHeight,
+						$this->BuildJS()
+				);
 	}
 }
 ?>
