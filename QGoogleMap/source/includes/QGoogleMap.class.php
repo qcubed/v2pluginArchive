@@ -543,7 +543,7 @@ class QGoogleMap extends QControl {
 	 *	@return: string (The HTML to call the Google Map API)
 	 **/
 	public function GetAPIHTML() {
-		return "<script type=\"text/javascript\" src=\"http://maps.google.com/maps?file=api&v=2&key={$this->_MapKey}\"></script>\n";
+		return "<script type=\"text/javascript\" src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key={$this->_MapKey}\"></script>\n";
 	}
 
 	/**
