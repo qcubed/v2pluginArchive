@@ -1,8 +1,8 @@
 <?php
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QGoogleMap"; // no spaces allowed
-$objPlugin->strDescription = 'Render a Google Map in a QControl, with many options and multiple addresses.';
-$objPlugin->strVersion = "1.0";
+$objPlugin->strDescription = 'Render a Google Map in a QPanel, with many options and the ability to add multiple addresses. Includes a menu of addresses.';
+$objPlugin->strVersion = "1.1";
 $objPlugin->strPlatformVersion = "1.1"; 
 $objPlugin->strAuthorName = "D. Scott Carroll, a.k.a. Scottux";
 $objPlugin->strAuthorEmail ="d [dot] scott [dot] carroll [at] gmail [dot] com"; 
@@ -15,7 +15,7 @@ $objPlugin->addComponents($files);
 
 $components = array();
 $components[] = new QPluginIncludedClass("QGoogleMap", "includes/QGoogleMap.class.php");
-$components[] = new QPluginExample("example/QGoogleMapExample.php", "Test the Google Map API");
+$components[] = new QPluginExample("example/QGoogleMapExample.php", "Google Map Example");
 $objPlugin->addComponents($components);
 
 $objPlugin->install();

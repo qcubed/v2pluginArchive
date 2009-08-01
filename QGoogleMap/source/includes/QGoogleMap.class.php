@@ -11,7 +11,7 @@ class QGoogleMap extends QPanel {
 	 *	Is data provided by a GPS Sensor?
 	 *	@var	boolean
 	 **/	
-	protected $_MapSensor = FALSE;
+	protected $_MapSensor = "false";
 	/**
 	 *	Default Map Sizes
 	 *	@var	int
@@ -394,6 +394,11 @@ class QGoogleMap extends QPanel {
 					$objExc->IncrementOffset();
 					throw $objExc;
 				}
+				if($this->_MapSensor == TRUE) {
+					$this->_MapSensor = "true";
+				}else{
+					$this->_MapSensor = "false";
+				}
 
 			default:
 				try {
@@ -411,9 +416,9 @@ class QGoogleMap extends QPanel {
 	 **/
 	public function AddAddress($address, $info = null, $str = null) {
 		$this->_Index++;
-		$this->_AddressArr[$this->_Index] = htmlentities($address);
-		$this->_InfoWindowTextArr[$this->_Index] = htmlentities($info);
-		$this->_MapMenu[$this->_Index] = htmlentities($str);
+		$this->_AddressArr[$this->_Index] = $address;
+		$this->_InfoWindowTextArr[$this->_Index] = $info;
+		$this->_MapMenu[$this->_Index] = $str;
 	}
 
 	/**
@@ -438,7 +443,7 @@ class QGoogleMap extends QPanel {
 
 		# start of JS
 		$ret .= "<script type=\"text/javascript\">\n";
-		$ret .= "<![CDATA[\n";
+		$ret .= "/* <![CDATA[ */\n";
 		$ret .= "var gmarkers = [];\n";
 		$ret .= "var address = [];\n";
 		$ret .= "var points = [];\n";
@@ -503,8 +508,8 @@ class QGoogleMap extends QPanel {
 		for ($i=$cnt_add-1; $i>=0; $i--) {
 
 			$ret .= "	var address_$i = {\n";
-			$ret .= "	  infowindowtext: '".addslashes($this->_InfoWindowTextArr[$i])."',\n";
-			$ret .= "	  full: '".addslashes($this->_AddressArr[$i])."'\n";
+			$ret .= "	  infowindowtext: '".addslashes(htmlentities($this->_InfoWindowTextArr[$i]))."',\n";
+			$ret .= "	  full: '".addslashes(htmlentities($this->_AddressArr[$i]))."'\n";
 			$ret .= "	};\n\n";
 
 			$ret .= "	address[$i] = address_$i.infowindowtext;\n\n";
@@ -548,8 +553,7 @@ class QGoogleMap extends QPanel {
 		$ret .= "	  alert( 'Location not found: ' +  stripped );\n";
 		$ret .= "   } /*endif*/\n";
 		$ret .= "} /*end function */\n";
-
-		$ret .= "]]>\n";
+		$ret .= "/* ]]> */\n";
 		$ret .= "</script>\n";
 
 		return $ret;
@@ -568,12 +572,12 @@ class QGoogleMap extends QPanel {
 	 * @return: string
 	 **/
 	public function GetMapMenu() {
-		$ret = "<ul id=\"map_menu\">\n";
+		$ret = "<ol id=\"map_menu\">\n";
 		$loop = count($this->_AddressArr);
 		for ($i=0; $i<$loop; $i++) {
 			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapMenu[$i]}</a></li>\n";
 		}
-		$ret .= "</ul>\n";
+		$ret .= "</ol>\n";
 		return $ret;
 	}
 
@@ -582,7 +586,7 @@ class QGoogleMap extends QPanel {
 	 * @return: string (The Google Map)
 	 **/
 	public function GetControlHtml() {
-		return sprintf('%s %s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript"><![CDATA[ window.onunload = function() { GUnload(); } ]]></script>',
+		return sprintf('%s %s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript">window.onunload = function() { GUnload(); }</script>',
 						$this->GetAPIHTML(),
 						$this->GetMapMenu(),
 						$this->_MapWidth,
