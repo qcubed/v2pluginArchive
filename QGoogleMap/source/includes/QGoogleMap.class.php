@@ -535,7 +535,7 @@ class QGoogleMap extends QPanel {
 
 			$ret .= "		}\n";
 			$ret .= "		else {\n";
-			$ret .= "		  map.setCenter(new GLatLng( 37.4419, -122.1419 ), $this->_MapZoom );\n";
+			$ret .= "		  // map.setCenter(new GLatLng( 37.4419, -122.1419 ), $this->_MapZoom );\n";
 			$ret .= "		}\n";
 			$ret .= "	  }\n";
 			$ret .= "	); // end geocoder.getLatLng\n\n";
