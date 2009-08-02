@@ -508,8 +508,8 @@ class QGoogleMap extends QPanel {
 		for ($i=$cnt_add-1; $i>=0; $i--) {
 
 			$ret .= "	var address_$i = {\n";
-			$ret .= "	  infowindowtext: '".addslashes(htmlentities($this->_InfoWindowTextArr[$i]))."',\n";
-			$ret .= "	  full: '".addslashes(htmlentities($this->_AddressArr[$i]))."'\n";
+			$ret .= "	  infowindowtext: '".addslashes($this->_InfoWindowTextArr[$i])."',\n";
+			$ret .= "	  full: '".addslashes($this->_AddressArr[$i])."'\n";
 			$ret .= "	};\n\n";
 
 			$ret .= "	address[$i] = address_$i.infowindowtext;\n\n";
