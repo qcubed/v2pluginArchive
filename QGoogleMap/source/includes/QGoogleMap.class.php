@@ -560,7 +560,8 @@ class QGoogleMap extends QPanel {
 
 			$ret .= "	address[$i] = address_$i.infowindowtext;\n\n";
 
-			if ($this->_LatArr[$i] != ""){
+		if (array_key_exists($i, $this->_LatArr)){
+			
 				
 			$ret .= "        addPlace (map, ".$this->_LatArr[$i].", ".$this->_LonArr[$i].",address_$i.infowindowtext, $i);\n";
 		
