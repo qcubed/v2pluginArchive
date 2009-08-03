@@ -30,7 +30,20 @@ class QGoogleMap extends QPanel {
 	 *	@var	array
 	 **/
 	protected $_AddressArr =  array();
+	
 
+	/**
+	*      Lat Array Holder
+	*      @var    array
+	**/
+	protected $_LatArr =  array();
+
+	/**
+	*      Lon Array Holder
+	*      @var    array
+	**/
+	protected $_LonArr =  array();
+	
 	/**
 	 *	Info Window Array holder
 	 *	@var	array
@@ -420,6 +433,25 @@ class QGoogleMap extends QPanel {
 		$this->_InfoWindowTextArr[$this->_Index] = $info;
 		$this->_MapMenu[$this->_Index] = $str;
 	}
+	
+	/**
+	*  Add LatLon
+	*  
+	*  This function is more accurate than AddAddress 
+	*  (AddAddress when fails will not mark a point on the map to match the listed item).
+	*  
+	*  We still need to go throughout the document and replace _AddressArr with something
+	*  neutral for handling indexes. Then we can make $address not required for this function,
+	*  right now it's just a placeholder in _AddressArr for index purposes.
+	**/
+	public function AddLatLon($address, $lat,$lon, $info = null, $str = null) {
+		$this->_Index++;
+		$this->_LatArr[$this->_Index] = $lat;
+		$this->_LonArr[$this->_Index] = $lon;
+		$this->_AddressArr[$this->_Index] = $address; //Index hack
+		$this->_InfoWindowTextArr[$this->_Index] = $info;
+		$this->_MapMenu[$this->_Index] = $str;
+	}	
 
 	/**
 	 *	Generate JS Code
@@ -503,6 +535,20 @@ class QGoogleMap extends QPanel {
 		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png';\n";
 		$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
 		$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
+		
+	$ret .= "function addPlace (map, lat, lng, label, index) {\n";
+	
+	$ret .= "var point = new GLatLng (lat, lng);\n";
+	$ret .= "points[index] = point; \n";
+	$ret .= "map.setCenter( point, $this->_MapZoom );\n";
+	$ret .= "var marker = new GMarker( point, icon );\n";
+	$ret .= "GEvent.addListener(marker, 'click', function() {\n";
+	$ret .= "	marker.openInfoWindowHtml( label );\n";
+	$ret .= "});\n";
+
+	$ret .= "map.addOverlay(marker);\n";
+	$ret .= "gmarkers[index] = marker;\n";
+	$ret .= "};\n\n";
 
 		# loop set address(es)
 		for ($i=$cnt_add-1; $i>=0; $i--) {
@@ -514,31 +560,22 @@ class QGoogleMap extends QPanel {
 
 			$ret .= "	address[$i] = address_$i.infowindowtext;\n\n";
 
-			$ret .= "	geocoder.getLatLng (\n";
-			$ret .= "	  address_$i.full,\n";
-			$ret .= "	  function(point) {\n";
-			$ret .= "		if(point) {\n";
-			$ret .= "		  points[$i] = point; \n";
-			$ret .= "		  map.setCenter( point, $this->_MapZoom );\n";
-			$ret .= "		  var marker = new GMarker( point, icon );\n";
-			$ret .= "		  GEvent.addListener(marker, 'click', function() {\n";
-			$ret .= "			marker.openInfoWindowHtml( address_$i.infowindowtext );\n";
-			$ret .= "		  });\n";
-
-			$ret .= "		  map.addOverlay(marker);\n";
-
-			# show only info window to the first set address
-			if ($i===0)
-			$ret .= "		  marker.openInfoWindowHtml( address_$i.infowindowtext );\n";
-
-			$ret .= "		  gmarkers[$i] = marker;\n";
-
-			$ret .= "		}\n";
-			$ret .= "		else {\n";
-			$ret .= "		  // map.setCenter(new GLatLng( 37.4419, -122.1419 ), $this->_MapZoom );\n";
-			$ret .= "		}\n";
-			$ret .= "	  }\n";
-			$ret .= "	); // end geocoder.getLatLng\n\n";
+			if ($this->_LatArr[$i] != ""){
+				
+			$ret .= "        addPlace (map, ".$this->_LatArr[$i].", ".$this->_LonArr[$i].",address_$i.infowindowtext, $i);\n";
+		
+			} else {
+			
+				$ret .= "	geocoder.getLatLng (\n";
+				$ret .= "	  address_$i.full,\n";
+				$ret .= "	  function(point) {\n";
+				$ret .= "		if(point) {\n";
+				$ret .= "    	  addPlace (map, point.lat(), point.lng(), address_$i.infowindowtext, $i);\n";
+				$ret .= "		}\n";
+				$ret .= "	  }\n";
+				$ret .= "	); // end geocoder.getLatLng\n\n";
+			
+			}
 
 		}
 		$ret .= "} // end if\n\n";
