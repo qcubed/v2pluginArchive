@@ -1,5 +1,5 @@
 <?php
-	require(__PLUGINS__ . '/QFirebug/' . 'fb.php');
+	require(__PLUGINS__ . '/QFirebug/includes/fb.php');
 
 	abstract class QFirebug extends FB {
 		public static function OutputDatabaseProfile(QDatabaseBase $objDb = null){
@@ -11,9 +11,9 @@
 				$objProfileArray = $objDb->Profile;
 				$intCount = count($objProfileArray) / 2;
 				if ($intCount == 0) {
-					parent::log(QApplication::Translate('No queries that were performed.'));
+					parent::log(QApplication::Translate('No queries were performed.'));
 				} else if ($intCount == 1) {
-					parent::log(QApplication::Translate('1 query that was performed.'));
+					parent::log(QApplication::Translate('1 query was performed.'));
 				} else {
 					$log = sprintf(QApplication::Translate('%s queries were performed.'), $intCount);
 					parent::log($log);
