@@ -509,15 +509,15 @@ class QGoogleMap extends QPanel {
 		$ret .= "	var geocoder = new GClientGeocoder();\n";
 		$ret .= "	var icon = new GIcon();\n";
 		$ret .= "	icon.image = 'http://google.webassist.com/google/markers/$dir/$color.png';\n";
-		//$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png';\n";
+		$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png';\n";
 		$ret .= "	icon.iconSize = new GSize($icon_w,$icon_h);\n";
-		//$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h);\n";
+		$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h);\n";
 		$ret .= "	icon.iconAnchor = new GPoint($icon_anchr_w,$icon_anchr_h);\n";
 		$ret .= "	icon.infoWindowAnchor = new GPoint($info_win_anchr_w,$info_win_anchr_h);\n";
 		$ret .= "	icon.printImage = 'http://google.webassist.com/google/markers/$dir/$color.gif';\n";
 		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png';\n";
-		//$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
-		//$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
+		$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
+		$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
 		
 		
 		$ret .= "window.onload = function() { \n";
