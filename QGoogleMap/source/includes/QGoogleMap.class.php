@@ -1,7 +1,7 @@
 <?php
 
 class QGoogleMap extends QPanel {
-
+	
 	/**
 	 *	Google Map API Key
 	 *	@var	string
@@ -12,6 +12,9 @@ class QGoogleMap extends QPanel {
 	 *	@var	boolean
 	 **/	
 	protected $_MapSensor = "false";
+
+	protected $strJavascripts;
+
 	/**
 	 *	Default Map Sizes
 	 *	@var	int
@@ -24,38 +27,38 @@ class QGoogleMap extends QPanel {
 	 *	@var	int
 	 **/
 	protected $_MapZoom ='13';
-
-	/**
-	 *	Address Array Holder
-	 *	@var	array
-	 **/
-	protected $_AddressArr =  array();
-	
-
-	/**
-	*      Lat Array Holder
-	*      @var    array
-	**/
-	protected $_LatArr =  array();
-
-	/**
-	*      Lon Array Holder
-	*      @var    array
-	**/
-	protected $_LonArr =  array();
-	
-	/**
-	 *	Info Window Array holder
-	 *	@var	array
-	 **/
-	protected $_InfoWindowTextArr = array();
-
-	/**
-	 *	Map Links
-	 *	@var	array
-	 **/
-	protected $_MapMenu = array();
-
+//
+//	/**
+//	 *	Address Array Holder
+//	 *	@var	array
+//	 **/
+//	protected $_AddressArr =  array();
+//	
+//
+//	/**
+//	*      Lat Array Holder
+//	*      @var    array
+//	**/
+//	protected $_LatArr =  array();
+//
+//	/**
+//	*      Lon Array Holder
+//	*      @var    array
+//	**/
+//	protected $_LonArr =  array();
+//	
+//	/**
+//	 *	Info Window Array holder
+//	 *	@var	array
+//	 **/
+//	protected $_InfoWindowTextArr = array();
+//
+//	/**
+//	 *	Map Links
+//	 *	@var	array
+//	 **/
+//	protected $_MapMenu = array();
+	protected $_MapObjectArray = array();
 	/**
 	 *	Default Marker Icon Color Scheme
 	 *	@var	string
@@ -175,7 +178,9 @@ class QGoogleMap extends QPanel {
 							'NONE',
 							'SMALL_PAN_ZOOM',
 							'LARGE_PAN_ZOOM',
-							'SMALL_ZOOM'
+							'LARGE_PAN_ZOOM_3D',
+							'SMALL_ZOOM',
+							'SMALL_ZOOM_3D'
 							);
 
 	/**
@@ -188,7 +193,13 @@ class QGoogleMap extends QPanel {
 	 *
 	 *	@var	booleanEnable/Disable Map Double Click Zooming
 	 **/
-	public $_DoubleClickZoom = FALSE;
+	public $_DoubleClickZoom = TRUE;
+
+	/**
+	 *
+	 *	@var	booleanEnable/Disable Map Scroll Wheel Zooming
+	 **/
+	public $_ScrollWheelZoom = TRUE;
 
 	/**
 	 *	Enable/Disable Map Scale (Mi/Km)
@@ -209,7 +220,7 @@ class QGoogleMap extends QPanel {
 	public $_MapType = FALSE;
 
 	/**
-	 *	Index for Address/Info/Menu Arrays
+	 *	Index for Arrays
 	 *	@var	int
 	 **/
 	protected $_Index = -1;
@@ -390,6 +401,7 @@ class QGoogleMap extends QPanel {
 			case 'MapKey' :
 				try {
 					$this->_MapKey = QType::Cast($mixValue, QType::String);
+					$this->strJavaScripts = 'http://maps.google.com/maps?file=api&amp;v=2&amp;sensor='.$this->_MapSensor.'&amp;key='.$this->_MapKey;
 					break;
 				} catch (QInvalidCastException $objExc) {
 					$objExc->IncrementOffset();
@@ -424,33 +436,45 @@ class QGoogleMap extends QPanel {
 		}
 	}
 
+	public function __get($strName)	{
+		switch ($strName) {
+			case 'MapKey': return $this->_MapKey;
+			default:
+				try {
+					return parent::__get($strName);
+				}
+				catch (QCallerException $objExc) {
+					$objExc->IncrementOffset();
+					throw $objExc;
+				}
+		}
+	}
+
 	/**
 	 *	Add Address(es)
 	 **/
 	public function AddAddress($address, $info = null, $str = null) {
 		$this->_Index++;
-		$this->_AddressArr[$this->_Index] = $address;
-		$this->_InfoWindowTextArr[$this->_Index] = $info;
-		$this->_MapMenu[$this->_Index] = $str;
+		$this->_MapObjectArray[$this->_Index]['address'] = $address;
+		$this->_MapObjectArray[$this->_Index]['popup'] = $info;
+		$this->_MapObjectArray[$this->_Index]['menu'] = $str;
 	}
 	
 	/**
-	*  Add LatLon
+	*  Add Coords
 	*  
 	*  This function is more accurate than AddAddress 
 	*  (AddAddress when fails will not mark a point on the map to match the listed item).
 	*  
 	*  We still need to go throughout the document and replace _AddressArr with something
-	*  neutral for handling indexes. Then we can make $address not required for this function,
-	*  right now it's just a placeholder in _AddressArr for index purposes.
+	*  neutral for handling indexes
 	**/
-	public function AddLatLon($address, $lat,$lon, $info = null, $str = null) {
+	public function AddCoords($lat,$lon, $info = null, $str = null) {
 		$this->_Index++;
-		$this->_LatArr[$this->_Index] = $lat;
-		$this->_LonArr[$this->_Index] = $lon;
-		$this->_AddressArr[$this->_Index] = $address; //Index hack
-		$this->_InfoWindowTextArr[$this->_Index] = $info;
-		$this->_MapMenu[$this->_Index] = $str;
+		$coords = $lat.','.$lon;
+		$this->_MapObjectArray[$this->_Index]['coords'] = $coords;
+		$this->_MapObjectArray[$this->_Index]['popup'] = $info;
+		$this->_MapObjectArray[$this->_Index]['menu'] = $str;
 	}	
 
 	/**
@@ -459,7 +483,7 @@ class QGoogleMap extends QPanel {
 	public function BuildJS() {
 		$ret = "";
 
-		$cnt_add = count($this->_AddressArr);
+		$cnt_add = count($this->_MapObjectArray);
 
 		$color = $this->_IconColorArr[$this->_IconColor];
 		$dir = $this->_IconStyleArr[$this->_IconStyle]['DIR'];
@@ -476,15 +500,35 @@ class QGoogleMap extends QPanel {
 		# start of JS
 		$ret .= "<script type=\"text/javascript\">\n";
 		$ret .= "/* <![CDATA[ */\n";
+		
 		$ret .= "var gmarkers = [];\n";
 		$ret .= "var address = [];\n";
 		$ret .= "var points = [];\n";
 
+
+		$ret .= "	var geocoder = new GClientGeocoder();\n";
+		$ret .= "	var icon = new GIcon();\n";
+		$ret .= "	icon.image = 'http://google.webassist.com/google/markers/$dir/$color.png';\n";
+		//$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png';\n";
+		$ret .= "	icon.iconSize = new GSize($icon_w,$icon_h);\n";
+		//$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h);\n";
+		$ret .= "	icon.iconAnchor = new GPoint($icon_anchr_w,$icon_anchr_h);\n";
+		$ret .= "	icon.infoWindowAnchor = new GPoint($info_win_anchr_w,$info_win_anchr_h);\n";
+		$ret .= "	icon.printImage = 'http://google.webassist.com/google/markers/$dir/$color.gif';\n";
+		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png';\n";
+		//$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
+		//$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
+		
+		
+		$ret .= "window.onload = function() { \n";
 		$ret .= "if(GBrowserIsCompatible()) {\n";
 		$ret .= "	var map = new GMap2(document.getElementById('map_canvas'));\n";
 
 		# handle map continuous zooming
 		$ret .= ($this->_ContinuousZoom==TRUE)?"	map.enableContinuousZoom();\n":"";
+
+		# handle map mouse scroll wheel zooming
+		$ret .= ($this->_ScrollWheelZoom==TRUE)?"	map.enableScrollWheelZoom();\n":"";
 
 		# handle map double click zooming
 		$ret .= ($this->_DoubleClickZoom==TRUE)?"	map.enableDoubleClickZoom();\n":"";
@@ -504,8 +548,16 @@ class QGoogleMap extends QPanel {
 				$mapCtrl = "map.addControl(new GLargeMapControl());\n";
 				break;
 
+			case 'LARGE_PAN_ZOOM_3D':
+				$mapCtrl = "map.addControl(new GLargeMapControl3D());\n";
+				break;
+
 			case 'SMALL_ZOOM':
 				$mapCtrl = "map.addControl(new GSmallZoomControl());\n";
+				break;
+
+			case 'SMALL_ZOOM_3D':
+				$mapCtrl = "map.addControl(new GSmallZoomControl3D());\n";
 				break;
 
 			default;
@@ -522,48 +574,30 @@ class QGoogleMap extends QPanel {
 
 		# handle map inset
 		$ret .= ($this->_MapInset==TRUE)?"	map.addControl(new GOverviewMapControl());\n":"";
-
-		$ret .= "	var geocoder = new GClientGeocoder();\n";
-		$ret .= "	var icon = new GIcon();\n";
-		$ret .= "	icon.image = 'http://google.webassist.com/google/markers/$dir/$color.png';\n";
-		$ret .= "	icon.shadow = 'http://google.webassist.com/google/markers/$dir/shadow.png';\n";
-		$ret .= "	icon.iconSize = new GSize($icon_w,$icon_h);\n";
-		$ret .= "	icon.shadowSize = new GSize($icon_w,$icon_h);\n";
-		$ret .= "	icon.iconAnchor = new GPoint($icon_anchr_w,$icon_anchr_h);\n";
-		$ret .= "	icon.infoWindowAnchor = new GPoint($info_win_anchr_w,$info_win_anchr_h);\n";
-		$ret .= "	icon.printImage = 'http://google.webassist.com/google/markers/$dir/$color.gif';\n";
-		$ret .= "	icon.mozPrintImage = 'http://google.webassist.com/google/markers/$dir/{$color}_mozprint.png';\n";
-		$ret .= "	icon.printShadow = 'http://google.webassist.com/google/markers/$dir/shadow.gif'; \n";
-		$ret .= "	icon.transparent = 'http://google.webassist.com/google/markers/$dir/{$color}_transparent.png';\n\n";
-		
-	$ret .= "function addPlace (map, lat, lng, label, index) {\n";
-	
-	$ret .= "var point = new GLatLng (lat, lng);\n";
-	$ret .= "points[index] = point; \n";
-	$ret .= "map.setCenter( point, $this->_MapZoom );\n";
-	$ret .= "var marker = new GMarker( point, icon );\n";
-	$ret .= "GEvent.addListener(marker, 'click', function() {\n";
-	$ret .= "	marker.openInfoWindowHtml( label );\n";
-	$ret .= "});\n";
-
-	$ret .= "map.addOverlay(marker);\n";
-	$ret .= "gmarkers[index] = marker;\n";
-	$ret .= "};\n\n";
-
 		# loop set address(es)
 		for ($i=$cnt_add-1; $i>=0; $i--) {
 
 			$ret .= "	var address_$i = {\n";
-			$ret .= "	  infowindowtext: '".addslashes($this->_InfoWindowTextArr[$i])."',\n";
-			$ret .= "	  full: '".addslashes($this->_AddressArr[$i])."'\n";
+			$ret .= "	  infowindowtext: '".addslashes($this->_MapObjectArray[$i]['popup'])."',\n";
+			if (array_key_exists("address", $this->_MapObjectArray[$i])){
+				$ret .= "	full: '".addslashes($this->_MapObjectArray[$i]['address'])."',\n";
+			}else{
+				$ret .= "	full: '',\n";
+			}
+			if (array_key_exists("coords", $this->_MapObjectArray[$i])){
+				$ret .= "	coords: '".$this->_MapObjectArray[$i]['coords']."'\n";
+			}else{
+			    $ret .= "	  coords: ''\n";
+			}
 			$ret .= "	};\n\n";
 
 			$ret .= "	address[$i] = address_$i.infowindowtext;\n\n";
 
-		if (array_key_exists($i, $this->_LatArr)){
-			
-				
-			$ret .= "        addPlace (map, ".$this->_LatArr[$i].", ".$this->_LonArr[$i].",address_$i.infowindowtext, $i);\n";
+			if (array_key_exists("coords", $this->_MapObjectArray[$i])){
+				$coordsarray = explode(',',$this->_MapObjectArray[$i]['coords']);
+				$latitude = $coordsarray[0];
+				$longitude = $coordsarray[1];
+				$ret .= "        addPlace (map, $latitude, $longitude ,address_$i.infowindowtext, $i);\n";
 		
 			} else {
 			
@@ -580,17 +614,32 @@ class QGoogleMap extends QPanel {
 
 		}
 		$ret .= "} // end if\n\n";
+				
 
+		$ret .= "function addPlace (map, lat, lng, html, index) {\n";
+		$ret .= "	var point = new GLatLng (lat, lng);\n";
+		$ret .= "	points[index] = point; \n";
+		$ret .= "	map.setCenter( point, $this->_MapZoom );\n";
+		$ret .= "	var marker = new GMarker( point, icon );\n";
+		$ret .= "	GEvent.addListener(marker, 'click', function() {\n";
+		$ret .= "		marker.openInfoWindowHtml( html );\n";
+		$ret .= "	});\n";
+
+		$ret .= "	map.addOverlay(marker);\n";
+		$ret .= "	gmarkers[index] = marker;\n";
+		$ret .= "};\n\n";
+		$ret .= "} // end load function \n\n";
 		$ret .= "function mapMenu(i) {\n";
-		$ret .= "   if (gmarkers[i]) {\n";
-		$ret .= "	  gmarkers[i].openInfoWindowHtml(address[i]);\n";
-		$ret .= "	  map.setCenter( points[i], $this->_MapZoom );\n";
-		$ret .= "   } else {\n";
-		$ret .= "	  var htstring = address[i];\n";
-		$ret .= "	  var stripped = htstring.replace(/(<([^>]+)>)/ig,'');\n";
-		$ret .= "	  alert( 'Location not found: ' +  stripped );\n";
-		$ret .= "   } /*endif*/\n";
+		$ret .= "   	if (gmarkers[i]) {\n";
+		$ret .= "		gmarkers[i].openInfoWindowHtml(address[i]);\n";
+		$ret .= "		map.setCenter( points[i], $this->_MapZoom );\n";
+		$ret .= "	} else {\n";
+		$ret .= "		var htstring = address[i];\n";
+		$ret .= "		var stripped = htstring.replace(/(<([^>]+)>)/ig,'');\n";
+		$ret .= "		alert( 'Location not found: ' +  stripped );\n";
+		$ret .= "	} /*endif*/\n";
 		$ret .= "} /*end function */\n";
+
 		$ret .= "/* ]]> */\n";
 		$ret .= "</script>\n";
 
@@ -611,9 +660,9 @@ class QGoogleMap extends QPanel {
 	 **/
 	public function GetMapMenu() {
 		$ret = "<ol id=\"map_menu\">\n";
-		$loop = count($this->_AddressArr);
+		$loop = count($this->_MapObjectArray);
 		for ($i=0; $i<$loop; $i++) {
-			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapMenu[$i]}</a></li>\n";
+			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapObjectArray[$i]['menu']}</a></li>\n";
 		}
 		$ret .= "</ol>\n";
 		return $ret;
@@ -624,8 +673,7 @@ class QGoogleMap extends QPanel {
 	 * @return: string (The Google Map)
 	 **/
 	public function GetControlHtml() {
-		return sprintf('%s %s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript">window.onunload = function() { GUnload(); }</script>',
-						$this->GetAPIHTML(),
+		return sprintf('%s<div id="map_canvas" style="width: %spx; height: %spx;"></div> %s <script type="text/javascript">window.onunload = function() { GUnload(); }</script>',
 						$this->GetMapMenu(),
 						$this->_MapWidth,
 						$this->_MapHeight,
