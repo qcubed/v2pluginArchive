@@ -1,4 +1,6 @@
-<?php $this->RenderBegin(); ?>
+<?php //require(__DOCROOT__ . __EXAMPLES__ . '/includes/header.inc.php'); ?>
+	<?php $this->RenderBegin(); ?>
+
 	<div class="instructions">
 		<div class="instruction_title">QPage</div>
 		<p>A <strong>QPage</strong> is extended from QForm to produce the
@@ -10,4 +12,6 @@
 		header/footer/menu structures etc.</p>
 	</div>
 	<?php $this->strExampleLabel->Render(); ?>
-<?php $this->RenderEnd(); ?>
+	
+<?php $this->RenderEnd(); ?>				
+<?php //require(__DOCROOT__ . __EXAMPLES__ . '/includes/footer.inc.php'); ?>
