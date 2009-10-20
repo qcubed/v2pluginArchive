@@ -65,6 +65,8 @@ class QGoogleMap extends QPanel {
 	 **/
 	protected $_IconColor = 'PACIFICA';
 
+	
+	
 	/**
 	 *	Array of Marker Icon Color Schemes
 	 *	@var	array
@@ -225,6 +227,13 @@ class QGoogleMap extends QPanel {
 	 **/
 	protected $_Index = -1;
 
+	/**
+	 * Initialize Map JSON
+	 *
+	 * @var unknown_type
+	 */
+	protected $_JSONLocation = FALSE;
+	
 	/**
 	 * If this control needs to update itself from the $_POST data, the logic to do so
 	 * will be performed in this method.
@@ -628,6 +637,27 @@ class QGoogleMap extends QPanel {
 		$ret .= "	map.addOverlay(marker);\n";
 		$ret .= "	gmarkers[index] = marker;\n";
 		$ret .= "};\n\n";
+
+		if ($this->_JSONLocation != FALSE) {
+			$ret .= "function createMarker(input) {\n";
+			$ret .= "var marker = new GMarker(input.point, icon);\n";
+			$ret .= "	GEvent.addListener(marker, 'click', function() {\n";
+			$ret .= "		marker.openInfoWindowHtml( input.html );\n";
+			$ret .= "	});\n";
+			$ret .= "	return marker;\n";
+			$ret .= "}\n";
+			$ret .= "function parseJson (doc) {\n";
+			$ret .= 'var jsonData = eval("(" + doc + ")");'."\n";
+			$ret .= "for (var i = 0; i < jsonData.markers.length; i++) {\n";
+			$ret .= "var marker = createMarker(jsonData.markers[i]);\n";
+			$ret .= "map.addOverlay(marker);\n";
+			$ret .= "}\n";
+			$ret .= "}\n";
+			$ret .= "GDownloadUrl(\"".$this->_JSONLocation."\", function(data, responseCode) {\n";
+			$ret .= "parseJson(data);\n";
+			$ret .= "});\n";
+		}
+
 		$ret .= "} // end load function \n\n";
 		$ret .= "function mapMenu(i) {\n";
 		$ret .= "   	if (gmarkers[i]) {\n";
@@ -640,6 +670,8 @@ class QGoogleMap extends QPanel {
 		$ret .= "	} /*endif*/\n";
 		$ret .= "} /*end function */\n";
 
+		
+		
 		$ret .= "/* ]]> */\n";
 		$ret .= "</script>\n";
 
@@ -659,12 +691,16 @@ class QGoogleMap extends QPanel {
 	 * @return: string
 	 **/
 	public function GetMapMenu() {
-		$ret = "<ol id=\"map_menu\">\n";
 		$loop = count($this->_MapObjectArray);
-		for ($i=0; $i<$loop; $i++) {
-			$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapObjectArray[$i]['menu']}</a></li>\n";
+		$ret = '';
+		if ($loop > 0) {
+			$ret .= "<ol id=\"map_menu\">\n";
+			
+			for ($i=0; $i<$loop; $i++) {
+				$ret .=	"<li><a href=\"javascript:void($i);\" onclick=\"javascript:mapMenu($i);\">{$this->_MapObjectArray[$i]['menu']}</a></li>\n";
+			}
+			$ret .= "</ol>\n";
 		}
-		$ret .= "</ol>\n";
 		return $ret;
 	}
 
@@ -679,6 +715,10 @@ class QGoogleMap extends QPanel {
 						$this->_MapHeight,
 						$this->BuildJS()
 				);
+	}
+	
+	public function SetJSONLocation($url) {
+			$this->_JSONLocation = $url;
 	}
 }
 ?>
