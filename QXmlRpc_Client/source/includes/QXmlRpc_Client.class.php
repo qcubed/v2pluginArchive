@@ -1,39 +1,38 @@
 <?php
 
 class QXmlRpc_Client {
-
 	protected $blnDebug = FALSE;
 	protected $arrLog = array();
 
 	protected function serialize($data, $level = 0, $prior_key = NULL){
-		#assumes a hash, keys are the variable names
+		//assumes a hash, keys are the variable names
 		$xml_serialized_string = "";
 		while(list($key, $value) = each($data)){
 			$inline = false;
 			$numeric_array = false;
 			$attributes = "";
-			#echo "My current key is '$key', called with prior key '$prior_key'<br>";
-			if(!strstr($key, " attr")){ #if it's not an attribute
+			// echo "My current key is '$key', called with prior key '$prior_key'<br>";
+			if(!strstr($key, " attr")){ // if it's not an attribute
 				if(array_key_exists("$key attr", $data)){
 					while(list($attr_name, $attr_value) = each($data["$key attr"])){
-						#echo "Found attribute $attribute_name with value $attribute_value<br>";
+						//echo "Found attribute $attribute_name with value $attribute_value<br>";
 						$attr_value = htmlspecialchars($attr_value, ENT_QUOTES);
 						$attributes .= " $attr_name=\"$attr_value\"";
 					}
 				}
 
 				if(is_numeric($key)){
-					#echo "My current key ($key) is numeric. My parent key is '$prior_key'<br>";
+					//echo "My current key ($key) is numeric. My parent key is '$prior_key'<br>";
 					$key = $prior_key;
 				}else{
-					#you can't have numeric keys at two levels in a row, so this is ok
-					#echo "Checking to see if a numeric key exists in data.";
+					// you can't have numeric keys at two levels in a row, so this is ok
+					 //echo "Checking to see if a numeric key exists in data.";
 					if(is_array($value) and array_key_exists(0, $value)){
-						#	echo " It does! Calling myself as a result of a numeric array.<br>";
+						//	echo " It does! Calling myself as a result of a numeric array.<br>";
 						$numeric_array = true;
 						$xml_serialized_string .= $this->serialize($value, $level, $key);
 					}
-					#echo "<br>";
+					// echo "<br>";
 				}
 
 				if(!$numeric_array){
@@ -49,7 +48,7 @@ class QXmlRpc_Client {
 					$xml_serialized_string .= (!$inline ? str_repeat("\t", $level) : "") . "</$key>\r\n";
 				}
 			}else{
-				#echo "Skipping attribute record for key $key<bR>";
+				// echo "Skipping attribute record for key $key<bR>";
 			}
 		}
 		if($level == 0){
@@ -63,8 +62,8 @@ class QXmlRpc_Client {
 	public static function prepare($data, $type = NULL){
 		if(is_array($data)){
 			$num_elements = count($data);
-			if((array_key_exists(0, $data) or !$num_elements) and $type != 'struct'){ #it's an array
-				if(!$num_elements){ #if the array is empty
+			if((array_key_exists(0, $data) or !$num_elements) and $type != 'struct'){ // it's an array
+				if(!$num_elements){ // if the array is empty
 					$returnvalue =  array('array' => array('data' => NULL));
 				}else{
 					$returnvalue['array']['data']['value'] = array();
@@ -78,14 +77,14 @@ class QXmlRpc_Client {
 						$temp[$n] = QXmlRpc::prepare($data[$n], $type);
 					}
 				}
-			}else{ #it's a struct
-				if(!$num_elements){ #if the struct is empty
+			}else{ // it's a struct
+				if(!$num_elements){ //if the struct is empty
 					$returnvalue = array('struct' => NULL);
 				}else{
 					$returnvalue['struct']['member'] = array();
 					$temp = $returnvalue['struct']['member'];
 					while(list($key, $value) = each($data)){
-						if(substr($key, -5) != ' type'){ #if it's not a type specifier
+						if(substr($key, -5) != ' type'){ //if it's not a type specifier
 							$type = NULL;
 							if(array_key_exists("$key type", $data)){
 								$type = $data["$key type"];
@@ -95,7 +94,7 @@ class QXmlRpc_Client {
 					}
 				}
 			}
-		}else{ #it's a scalar
+		}else{ // it's a scalar
 			if(!$type){
 				if(is_int($data)){
 					$returnvalue['int'] = $data;
@@ -106,7 +105,7 @@ class QXmlRpc_Client {
 				}elseif(is_bool($data)){
 					$returnvalue['boolean'] = ($data ? 1 : 0);
 					return $returnvalue;
-				}elseif(preg_match('/^\d{8}T\d{2}:\d{2}:\d{2}$/', $data, $matches)){ #it's a date
+				}elseif(preg_match('/^\d{8}T\d{2}:\d{2}:\d{2}$/', $data, $matches)){ //it's a date
 					$returnvalue['dateTime.iso8601'] = $data;
 					return $returnvalue;
 				}elseif(is_string($data)){
@@ -125,11 +124,11 @@ class QXmlRpc_Client {
 		if(is_object($current_node)){
 			if(isset($current_node->array)){
 				if(!is_object($current_node->array->data)){
-					#If there are no elements, return an empty array
-					#echo "If there are no elements, return an empty array";
+					//If there are no elements, return an empty array
+					//echo "If there are no elements, return an empty array";
 					return array();
 				}else{
-					#echo "Getting rid of array -> data -> value<br>\n";
+					//echo "Getting rid of array -> data -> value<br>\n";
 					$temp = $current_node->array->data->value;
 					if(is_object($temp) and $temp[0]){
 						$count = count($temp);
@@ -140,30 +139,30 @@ class QXmlRpc_Client {
 					}else{
 						$temp2 = $this->adjustValue($temp);
 						$temp = array($temp2);
-						#I do the temp assignment because it avoids copying,
-						# since I can put a reference in the array
-						#PHP's reference model is a bit silly, and I can't just say:
-						# $temp = array($this->adjustValue($temp));
+						//I do the temp assignment because it avoids copying,
+						// since I can put a reference in the array
+						//PHP's reference model is a bit silly, and I can't just say:
+						// $temp = array($this->adjustValue($temp));
 					}
 				}
 			}elseif(isset($current_node->struct)){
 				if(!is_object($current_node->struct)){
-					#If there are no members, return an empty array
-					#echo "If there are no members, return an empty array";
+					//If there are no members, return an empty array
+					//echo "If there are no members, return an empty array";
 					return array();
 				}else{
-					#echo "Getting rid of struct -> member<br>\n";
+					//echo "Getting rid of struct -> member<br>\n";
 					$temp = $current_node->struct->member;
 					if(is_object($temp) and isset($temp[0])){
 						$count = count($temp);
 						$temp2 = array();
 						for($n=0;$n<$count;$n++){
-							#echo "Passing name {$temp->$n->name}. Value is: " . $this->show($temp->$n->value, 'var_dump', true) . "<br>\n";
+							//echo "Passing name {$temp->$n->name}. Value is: " . $this->show($temp->$n->value, 'var_dump', true) . "<br>\n";
 							$temp2[(string) $temp->$n->name]= $this->adjustValue($temp->$n->value);
-							#echo "adjustValue(): After assigning, the value is " . $this->show($temp2[$temp->$n->name], 'var_dump', true) . "<br>\n";
+							//echo "adjustValue(): After assigning, the value is " . $this->show($temp2[$temp->$n->name], 'var_dump', true) . "<br>\n";
 						}
 					}else{
-						#echo "Passing name $temp[name]<br>\n";
+						//echo "Passing name $temp[name]<br>\n";
 						$temp2[(string)$temp->name] = $this->adjustValue($temp->value);
 					}
 					$temp = $temp2;
@@ -175,9 +174,9 @@ class QXmlRpc_Client {
 
 				foreach($types as $type){
 					if($current_node->$type){
-						#echo "Getting rid of '$type'<br>\n";
+						//echo "Getting rid of '$type'<br>\n";
 						$temp = $current_node->$type;
-						#echo "adjustValue(): The current node is set with a type of $type<br>\n";
+						//echo "adjustValue(): The current node is set with a type of $type<br>\n";
 						$fell_through = false;
 						break;
 					}
@@ -185,7 +184,7 @@ class QXmlRpc_Client {
 
 				if($fell_through){
 					$type = 'string';
-					#echo "Fell through! Type is $type<br>\n";
+					//echo "Fell through! Type is $type<br>\n";
 				}
 				switch ($type){
 					case 'int': case 'i4': $temp = (int)$temp;    break;
@@ -224,8 +223,8 @@ class QXmlRpc_Client {
 		if($this->blnDebug){
 			$this->debug('XMLRPC_request', "<p>Received the following parameter list to send:</p>" . $this->show($params, 'print_r', true));
 		}
-		$conn = fsockopen ($site, $port); #open the connection
-		if(!$conn){ #if the connection was not opened successfully
+		$conn = fsockopen ($site, $port); //open the connection
+		if(!$conn){ //if the connection was not opened successfully
 			if($this->blnDebug){
 				$this->debug('XMLRPC_request', "<p>Connection failed: Couldn't make the connection to $site.</p>");
 			}
@@ -246,14 +245,14 @@ class QXmlRpc_Client {
 				$this->debug('XMLRPC_request', "<p>Sent the following request:</p>\n\n" . $this->show($headers . $data, 'print_r', true));
 			}
 
-			#socket_set_blocking ($conn, false);
+			//socket_set_blocking ($conn, false);
 			$response = "";
 			while(!feof($conn)){
 				$response .= fgets($conn, 1024);
 			}
 			fclose($conn);
 
-			#strip headers off of response
+			//strip headers off of response
 			$response_pos = strpos($response, "\r\n\r\n") + 4;
 			$response_strip = substr($response, $response_pos);
 			$data = new SimpleXMLElement($response_strip);
@@ -332,4 +331,4 @@ class QXmlRpc_Client {
 		}
 	}
 }
-?> 
+?>
