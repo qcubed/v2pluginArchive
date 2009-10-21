@@ -2,7 +2,7 @@
 
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QXmlRpcClient";
-$objPlugin->strDescription = 'Plugin that enable to create a XML-RPC client to access XML-RPC services';
+$objPlugin->strDescription = 'An XML-RPC client that complies with the specifications from <a href="http://phpxmlrpc.sourceforge.net">http://phpxmlrpc.sourceforge.net</a>.';
 $objPlugin->strVersion = "0.2";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
