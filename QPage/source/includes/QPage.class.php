@@ -420,15 +420,10 @@ class QPage extends QForm {
 				throw new QCallerException('FormStatus is in an unknown status');
 		}
 
-		// Persist Controls (if applicable)
-		foreach ($this->objPersistentControlArray as $objControl)
-			$objControl->Persist();
-
-		// Clone Myself
-		$objForm = clone($this);
 		$strToReturn = '';
-		$strToReturn .= $this->WriteEndScripts();
 		$strToReturn .= $this->HtmlFormEnd();
+		$strToReturn .= $this->WriteEndScripts();
+		
 
 		$strToReturn .= "\n</div></body></html>";
 
