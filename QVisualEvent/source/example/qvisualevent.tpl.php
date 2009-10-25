@@ -19,16 +19,13 @@
          
          <p><b>Usage:</b></p>
          <p>Load</p>
-         <code>
-         	$objQVE = new QVisualEvent($this); // To load Visual Event tool and Initialize the events parsing 
-         	$objQVE->Init(); ////Call to render Visual Events
-         </code>
+         <code>$objQVE = new QVisualEvent($this); // To load Visual Event tool and Initialize the events parsing</code>
+         <br/> 
+         <code>$objQVE->Init(); //Call to render Visual Events</code>
          
          <p>Remove: If you are seeing the events parser and you need to return again to normal page; you just need to press <b>ESC key</b> or call by code.</p>
          
-         <code>
-         	$objQVE->Close();
-         </code>	
+         <code>$objQVE->Close();</code>	
          
          <p> More information at <a href="http://www.sprymedia.co.uk/article/Visual+Event">Official Page</a></p>
 	</div>
