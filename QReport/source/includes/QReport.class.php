@@ -174,14 +174,14 @@
 			$strToReturn .= "</span>\r\n  <span class=\"left\">";
 			if ($this->TotalItemCount > 0) {
 				$intStart = (($this->PageNumber - 1) * $this->ItemsPerPage) + 1;
-				$intEnd = $intStart + count($this->DataSource) - 1;
+				$intEnd = $intStart + count($this->objData) - 1;
 				$strToReturn .= sprintf($this->strLabelForPaginated,
 					$this->strNounPlural,
 					$intStart,
 					$intEnd,
 					$this->TotalItemCount);
 			} else {
-				$intCount = count($this->objDataSource);
+				$intCount = count($this->objData);
 				if ($intCount == 0)
 					$strToReturn .= sprintf($this->strLabelForNoneFound, $this->strNounPlural);
 				else if ($intCount == 1)
