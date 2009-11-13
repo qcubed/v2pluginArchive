@@ -138,8 +138,8 @@ class QVisualCalendar extends QControl {
 				// default cssclass to selectable day
 				$strClass = "day";
 				$intCurrentDate = strtotime($this->intMonth . "/" . $x . "/" . $this->intYear);
-				$intMinSelectableDate = ($this->minSelectableDate != "" ? strtotime($this->minSelectableDate) : 0);
-				$intMaxSelectableDate = ($this->maxSelectableDate != "" ? strtotime($this->maxSelectableDate) : strtotime('18 Jan 2038'));
+				$intMinSelectableDate = ($this->minSelectableDate->IsNull() ? 0:$this->minSelectableDate->Timestamp); 
+				$intMaxSelectableDate = ($this->maxSelectableDate->IsNull() ? strtotime('18 Jan 2038'):$this->maxSelectableDate->Timestamp);
 				if ($intCurrentDate >= $intMinSelectableDate && $intCurrentDate <= $intMaxSelectableDate) {
 					$this->strActionParameter = $x+1;
 				} else {
@@ -167,8 +167,8 @@ class QVisualCalendar extends QControl {
 				// default cssclass to selectable day
 				$strClass = "day";
 				$intCurrentDate = strtotime($this->intMonth . "/" . $x . "/" . $this->intYear);
-				$intMinSelectableDate = ($this->minSelectableDate != "" ? strtotime($this->minSelectableDate) : 0);
-				$intMaxSelectableDate = ($this->maxSelectableDate != "" ? strtotime($this->maxSelectableDate) : strtotime('18 Jan 2038'));
+				$intMinSelectableDate = ($this->minSelectableDate->IsNull() ? 0:$this->minSelectableDate->Timestamp);
+				$intMaxSelectableDate = ($this->maxSelectableDate->IsNull() ? strtotime('18 Jan 2038'):$this->maxSelectableDate->Timestamp);
 				if ($intCurrentDate >= $intMinSelectableDate && $intCurrentDate <= $intMaxSelectableDate) {
 					$this->strActionParameter = $x+1;
 				} else {
@@ -197,7 +197,10 @@ class QVisualCalendar extends QControl {
 	public function __construct($objParentObject, $strControlId = null) {
 		try {
 			parent::__construct($objParentObject, $strControlId);
-			$this->strStyleSheets = 'qvisualcalendar/calendar.css';
+			
+			$this->minSelectableDate = new QDateTime();
+			$this->maxSelectableDate = new QDateTime();
+			
 			$this->AddAction(new QClickEvent(), new QAjaxControlAction($this, 'Navigate_Click'));
 			$this->AddAction(new QClickEvent(), new QTerminateAction());
 
@@ -278,10 +281,7 @@ class QVisualCalendar extends QControl {
 	public function __get($strName) {
 		switch ($strName) {
 
-			case "SelectedDate":
-				return QDateTimeTextBox::ParseForDateTimeValue($this->selectedDate);
-				break;
-					
+			case "SelectedDate": return $this->selectedDate;					
 			case "LabelForRequired": return $this->strLabelForRequired;
 			case "LabelForRequiredUnnamed": return $this->strLabelForRequiredUnnamed;
 			case "DateTime": return $this->DateTime;
@@ -348,10 +348,12 @@ class QVisualCalendar extends QControl {
 				$this->selectedDate = $mixValue;
 				break;
 			case "MinSelectableDate":
-				$this->minSelectableDate = $mixValue;
+				//$this->minSelectableDate = $mixValue;
+				$this->minSelectableDate = QType::Cast($mixValue, QType::DateTime);
 				break;
 			case "MaxSelectableDate":
-				$this->maxSelectableDate = $mixValue;
+				//$this->maxSelectableDate = $mixValue;
+				$this->maxSelectableDate = QType::Cast($mixValue, QType::DateTime);
 				break;
 
 			default:

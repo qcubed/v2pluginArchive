@@ -12,11 +12,11 @@ class ExampleForm extends QForm {
 	protected function Form_Create() {
 
 		$this->calStartCalendar = new QVisualCalendar($this);
-		$this->calStartCalendar->MaxSelectableDate = QDateTime::Now(false);
+		$this->calStartCalendar->MaxSelectableDate = QDateTime::Now();
 		$this->calStartCalendar->Name = "Max Selectable Date: Today";
 
 		$this->calEndCalendar = new QVisualCalendar($this);
-		$this->calEndCalendar->MinSelectableDate = QDateTime::Now(false);
+		$this->calEndCalendar->MinSelectableDate = QDateTime::Now();
 		$this->calEndCalendar->Name = "Min Selectable Date: Today";
 
 		$this->btnAction = new QButton($this);
@@ -34,7 +34,7 @@ class ExampleForm extends QForm {
 				QApplication::DisplayAlert(QApplication::Translate("End Date:") . " " . $this->calEndCalendar->SelectedDate);
 			} else 
 			{
-				QApplication::DisplayAlert(QApplication::Translate("You must select dates"));
+				QApplication::DisplayAlert(QApplication::Translate("You must select both dates"));
 			}	
 
 	}
