@@ -250,7 +250,7 @@
 				$this->strHtmlBefore = "\n<center><h1>" . $this->strName . "</center></h1>";
 				$this->strHtmlBefore.= "<div id=\"" . $this->strControlId . "_flot\" style=\"width:" . $this->intWidth ."px;height:" .  $this->intHeight. "px;\"></div>";
 				if($this->blnDisplayVariables){
-					$this->strHtmlBefore.= "<div id=\"" . $this->strControlId . "_variables\"";
+					$this->strHtmlBefore.= "<div id=\"" . $this->strControlId . "_variables\">";
 					if($this->strVariablesTitle)
 						$this->strHtmlBefore.= $this->strVariablesTitle;
 					$this->strHtmlBefore.= "</div>\n";

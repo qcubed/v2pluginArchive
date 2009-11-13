@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+
+table.main {
+	border: 1px solid;
+	width: 300px;
+	font-family: Verdana;
+	font-weight: normal;
+	margin-bottom:5px;
+	margin-top:5px;	
+}
+table.header {
+	width: 300px;
+	font-weight: bolder;
+}
+td.navdisabled {
+	color: grey;
+	text-decoration: none;	
+}
+td.dayheader {
+	margin-top: 2px;
+	margin-bottom: 2px;
+ 	width: 20px;
+ 	height: 20px;
+ 	text-align: center;
+ 	background-color: #DDD;
+ 	font-weight: bolder;
+}
+td.disabledheader {
+	margin-top: 2px;
+	margin-bottom: 2px;
+ 	width: 20px;
+ 	height: 20px;
+ 	text-align: center;
+ 	background-color: #DDD;
+ 	color: grey;
+}
+td.daydisabled {
+	margin: 3px;
+	text-align: center;
+	color: grey;
+}
+td.daydisabled a {
+	display: block;
+	color: grey;
+	text-decoration: none;
+}
+td.daydisabled a:hover {
+	display: block;
+	text-decoration: none;
+}
+td.day {
+	margin: 3px;
+	text-align: center;
+}
+td.day a:hover {
+	display: block;
+	background-color: linen;
+}
+td.dayselected {
+	margin: -1px;
+	text-align: center;
+	display: block;
+	background-color: midnightblue;
+	border: 1px solid;
+	color: white;
+	font-weight: bolder;
+}
+td.dayselected a {
+	text-decoration: none;
+	color: white;
+}
+td.dayprevmonth {
+	margin: 3px;
+	text-align: center;
+	color: grey;
+}
+td.daynextmonth {
+	margin: 3px;
+	text-align: center;
+	color: grey;
+}
+td.datedisplay {
+	text-align: center;
+}
+
+td.day a {
+	text-decoration: none;
+	color: black;
+}
