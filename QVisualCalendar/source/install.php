@@ -2,7 +2,7 @@
 
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QVisualCalendar";
-$objPlugin->strDescription = 'A JS Inline Visual Calender';
+$objPlugin->strDescription = 'A JS Inline Visual Calendar';
 $objPlugin->strVersion = "0.1";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
