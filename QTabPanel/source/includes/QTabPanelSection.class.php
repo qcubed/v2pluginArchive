@@ -92,8 +92,11 @@ class QTabPanelSection extends QPanel {
 			if($objControl instanceof QTabPanel || $objControl instanceof QTabPanelSection) {
 				$strToReturn.= $objControl->Render(false);
 			} else {
-				$strToReturn.= $objControl->RenderWithName(false);
-			}
+                    if($objControl->Name)
+                        $strToReturn.= $objControl->RenderWithName(false);
+                    else
+                        $strToReturn.= $objControl->Render(false);	
+            }
 		}
 
 		$strToReturn .=   $this->RenderEnd($blnDisplayOutput);
