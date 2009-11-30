@@ -4,7 +4,7 @@ $objPlugin = new QPlugin();
 $objPlugin->strName = "DialogBoxes";
 $objPlugin->strDescription = 'A collection of server-side "modal" dialog boxes: ' . 
 	'QConfirmationDialog, QTextBoxPromptDialog, QRadioButtonPromptDialog.';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.11";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Alex Weinstein, a.k.a. alex94040";
 $objPlugin->strAuthorEmail ="alex94040 [at] yahoo [dot] com";

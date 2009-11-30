@@ -4,7 +4,7 @@
 	<div class="instructions">
 		<h1 class="instruction_title">Server-Side Modal Dialogs</h1>
 		If you ever need to build server-side "modal" dialog boxes that look better than those that you can
-		<a href="../events_actions/javascript_alerts.php">make in plain HTML</a>, QCubed comes with a set of
+		<a href="../../../_core/php/examples/events_actions/javascript_alerts.php">make in plain HTML</a>, QCubed comes with a set of
 		pre-built server-side components that might help you. Each of the classes described below is just 
 		a subclass of <b>QDialogBox</b> - you can easily build one yourself after you inspect these pre-built
 		ones, but these ones can save you time.<br/><br/>
