@@ -9,7 +9,7 @@ class QPage extends QForm {
 	 *
 	 * @var string EncryptionKey the key to use, or NULL if no encryption is required
 	 */
-	public static $EncryptionKey = '\rCh4ng3m3\0';
+	public static $EncryptionKey = '\rcH4nG3m3.\0';
 
 	/**
 	 * The QFormStateHandler to use to handle the actual serialized form.  By default,
@@ -28,7 +28,7 @@ class QPage extends QForm {
 	 * @var		string
 	 * @access	protected
 	 */
-	protected $_strPageTitle = '';
+	protected $strPageTitle = '';
 
 	/**
 	 *  Protected value for public QPage->Generator
@@ -37,7 +37,7 @@ class QPage extends QForm {
 	 * @var		string
 	 * @access	protected
 	 */
- 	protected $_strGenerator = 'QCubed 1.1';
+ 	protected $strGenerator = 'QCubed';
 
  	/**
  	 * Protected value for public QPage->Language
@@ -46,7 +46,7 @@ class QPage extends QForm {
 	 * @var	 string
 	 * @access  public
 	 */
-	protected $_strLanguage = 'en-gb';
+	protected $strLanguage = 'en-gb';
 
 	/**
 	 * Protected value for public QPage->Description
@@ -55,7 +55,7 @@ class QPage extends QForm {
 	 * @var	 string
 	 * @access  protected
 	 */
-	protected $_strDescription = '';
+	protected $strDescription = '';
 
 	/**
 	 * Contains the document direction setting
@@ -63,13 +63,12 @@ class QPage extends QForm {
 	 * @var	 string
 	 * @access  public
 	 */
-	protected $_strPageDirection = 'ltr';
-	
-	protected $_arrStyleSheets = array();
-	protected $_arrJavaScripts = array();
-	protected $_arrMetaTags = array();
+	protected $strPageDirection = 'ltr';
+	protected $strJavaScripts = '';
+	protected $strStyleSheets = '';
+	protected $strMetaTagArray = array();
 
-	protected $_strEncodingType = "utf-8";
+	protected $strEncodingType = "utf-8";
 	protected $BodyOnload;
 	/**
 	 * Document mime type
@@ -77,7 +76,7 @@ class QPage extends QForm {
 	 * @var		string
 	 * @access	private
 	 */
-	protected $_strMimeType  = 'text/html';
+	protected $strMimeType  = 'text/html';
 
 	/**
 	 * Document DOCTYPE
@@ -85,7 +84,7 @@ class QPage extends QForm {
 	 * @var		string
 	 * @access	private
 	 */
-	protected $_strDocType = 'XHTML 1.0 Strict';
+	protected $strDocType = 'XHTML 1.0 Strict';
 	
 	public function __set($strName, $mixValue) {
 		switch ($strName) {
@@ -96,7 +95,7 @@ class QPage extends QForm {
 				 * @return string
 				 */
 				try {
-					return ($this->_strPageTitle = QType::Cast($mixValue, QType::String));
+					return ($this->strPageTitle = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
@@ -108,7 +107,7 @@ class QPage extends QForm {
 				 * @return string
 				 */
 				try {
-					return ($this->_strGenerator = QType::Cast($mixValue, QType::String));
+					return ($this->strGenerator = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
@@ -120,7 +119,7 @@ class QPage extends QForm {
 				 * @return string
 				 */
 				try {
-					return ($this->_strDescription = QType::Cast($mixValue, QType::String));
+					return ($this->strDescription = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
@@ -132,19 +131,19 @@ class QPage extends QForm {
 				 * @return string
 				 */
 				try {
-					return ($this->_strLanguage = QType::Cast($mixValue, QType::String));
+					return ($this->strLanguage = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
 				}
 			case 'Direction':
 				/**
-				 * Sets the value for _strPageDirection (Default 'ltr')
+				 * Sets the value for strPageDirection (Default 'ltr')
 				 * @param string $mixValue
 				 * @return string
 				 */
 				try {
-					return ($this->_strPageDirection = QType::Cast($mixValue, QType::String));
+					return ($this->strPageDirection = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
@@ -164,26 +163,26 @@ class QPage extends QForm {
 				}
 			case 'MimeType':
 				/**
-				 * Sets the value for _strMimeType (Default 'text/html')
+				 * Sets the value for strMimeType (Default 'text/html')
 				 * 
 				 * @param string $mixValue
 				 * @return string
 				 */
 				try {
-					return ($this->_strMimeType = QType::Cast(strtolower($mixValue), QType::String));
+					return ($this->strMimeType = QType::Cast(strtolower($mixValue), QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
 				}
 			case 'DocType':
 				/**
-				 * Sets the value for _strDocType (Default 'XHTML 1.0 Strict')
+				 * Sets the value for strDocType (Default 'XHTML 1.0 Strict')
 				 * 
 				 * @param string $mixValue
 				 * @return string
 				 */
 				try {
-					return ($this->_strDocType = QType::Cast($mixValue, QType::String));
+					return ($this->strDocType = QType::Cast($mixValue, QType::String));
 				} catch (QCallerException $objExc) {
 					$objExc->IncrementOffset();
 					throw $objExc;
@@ -223,60 +222,50 @@ class QPage extends QForm {
 				 * @return string
 				 */
 				return $this->PageTitle;
-			case 'StyleSheets':
-				/**
-				 * Gets the array of CSS Includes
-				 * @return array
-				 */
-				return (array) $this->_arrStyleSheets;
 			case 'MetaTags':
 				/**
 				 * Gets the array of Meta Tags
 				 * @return array
 				 */
-				return (array) $this->_arrMetaTags;
-			case 'JavaScripts':
-				/**
-				 * Gets the array of Javascript Includes
-				 * @return array
-				 */
-				return (array) $this->_arrJavaScripts;
+				return (array) $this->arrMetaTags;
 			case 'DocType':
 				/**
 				 * Gets the Document Type
 				 * @return string
 				 */
-				return $this->_strDocType;
+				return $this->strDocType;
 			case 'EncodingType':
 				/**
 				 * Gets the Encoding Type
 				 * @return string
 				 */
-				return $this->_strEncodingType;
+				return $this->strEncodingType;
 			case 'MimeType':
 				/**
 				 * Gets the Mime Type
 				 * @return string
 				 */
-				return $this->_strMimeType;
-			case 'Direction':
+				return $this->strMimeType;
+			case 'PageDirection':
 				/**
 				 * Gets the Page Direction
 				 * @return string
 				 */
-				return $this->_strPageDirection;
+				return $this->strPageDirection;
 			case 'Language':
 				/**
 				 * Gets the Language Used
 				 * @return string
 				 */
-				return $this->_strLanguage;
+				return $this->strLanguage;
 			case 'Description':
 				/**
 				 * Gets the Description for meta info
 				 * @return string
 				 */
-				return $this->_strDescription;
+				return $this->strDescription;
+			case "JavaScripts": return $this->strJavaScripts;
+			case "StyleSheets": return $this->strStyleSheets;
 			default:
 				try {
 					return parent::__get($strName);
@@ -331,6 +320,7 @@ class QPage extends QForm {
 	
 	protected function Form_Create() {
 		parent::Form_Create();
+				
 		foreach ($this->GetAllControls() as $objControl) {
 			// Include any JavaScripts?  The control would have a
 			// comma-delimited list of javascript files to include (if applicable)
@@ -347,6 +337,7 @@ class QPage extends QForm {
 				$this->strFormAttributeArray = array_merge($this->strFormAttributeArray, $objControl->FormAttributes);
 			}
 		}
+		
 	}
 	
 	public function AddMetaData($name, $content, $http_equiv = false){
@@ -366,11 +357,24 @@ class QPage extends QForm {
 				$this->_arrMetaTags['standard'][$name] = $content;
 			}
 		}
-	}	
-	public function AddStyleSheet($name){
-		$this->_arrStyleSheets = array($name);
 	}
 
+	public function AddJavascriptFile($strJsFileName) {
+		if($this->strJavaScripts) {
+			$this->strJavaScripts .= ','.$strJsFileName;
+		} else {
+			$this->strJavaScripts = $strJsFileName;
+		}
+	}
+	
+	public function AddCssFile($strCssFileName) {
+		if($this->strStyleSheets) {
+			$this->strStyleSheets .= ','.$strCssFileName;
+		} else {
+			$this->strStyleSheets = $strCssFileName;
+		}
+	}
+	
 	public function RenderBegin($blnDisplayOutput = true) {
 		// Ensure that RenderBegin() has not yet been called
 		switch ($this->intFormStatus) {
@@ -423,7 +427,6 @@ class QPage extends QForm {
 		$strToReturn = '';
 		$strToReturn .= $this->HtmlFormEnd();
 		$strToReturn .= $this->WriteEndScripts();
-		
 
 		$strToReturn .= "\n</div></body></html>";
 
@@ -466,75 +469,75 @@ class QPage extends QForm {
 		$ret = '';
 		$ret .= $this->WriteDocType();
 		$ret .= "\r\n\t<head>";	
-		$ret .= "\r\n\t\t".'<meta http-equiv="Content-Type" content="'.$this->_strMimeType.'; charset='.$this->_strEncodingType.'" />';
-		$ret .= "\r\n\t\t<title>".$this->_strPageTitle."</title>";
+		$ret .= "\r\n\t\t".'<meta http-equiv="Content-Type" content="'.$this->strMimeType.'; charset='.$this->strEncodingType.'" />';
+		$ret .= "\r\n\t\t<title>".$this->strPageTitle."</title>";
 		$ret .= "\r\n\t\t".'<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />';
-		$ret .= $this->WriteMetaTags();
 		$ret .= $this->WriteStylesheets();
 		$ret .= $this->WriteJavaScripts();
+		
 		$ret .= "\r\n\t</head>";
 		return $ret;
-	}
+	}	
 	
 	protected function HtmlBodyBegin() {
-		return sprintf("	<body%s><div>", $this->BodyOnload);
+		return sprintf("	<body%s><div class=\"container_12\">", $this->BodyOnload);
 	}
 
 	protected function WriteDocType() {
 		$ret = '';
 		switch($this->DocType) {
 			case "XHTML 1.0 Strict":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\" lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\" lang=\"".$this->strLanguage."\">";
 				break;
 			case "XHTML 1.0 Transitional":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\" lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\" lang=\"".$this->strLanguage."\">";
 				break;
 			case "XHTML 1.0 Frameset":				
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\" lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\" lang=\"".$this->strLanguage."\">";
 				break;
 			case "XHTML 1.1":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\">";
 				break;
 			case "HTML 4.01 Strict":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/html4/strict.dtd">';
-				$ret .= '<html lang="'.$this->_strLanguage.'">';
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/html4/strict.dtd">';
+				$ret .= '<html lang="'.$this->strLanguage.'">';
 				break;
 			case "HTML 4.01 Transitional":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/html4/transitioinal.dtd">';
-				$ret .= '<html lang="'.$this->_strLanguage.'">';
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/html4/transitioinal.dtd">';
+				$ret .= '<html lang="'.$this->strLanguage.'">';
 				break;
 			case "HTML5":
-				$ret .= '<!DOCTYPE html>'."\n".'<html lang="'.$this->_strLanguage.'">';
+				$ret .= '<!DOCTYPE html>'."\n".'<html lang="'.$this->strLanguage.'">';
 				break;
 			case "HTML 3.2":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN">'."\n<html>";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN">'."\n<html>";
 				break;
 			case "HTML 2.0":
-				$ret .= '<!DOCTYPE html PUBLIC "-//IETF//DTD '.$this->_strDocType.'//EN">'."\n<html>";
+				$ret .= '<!DOCTYPE html PUBLIC "-//IETF//DTD '.$this->strDocType.'//EN">'."\n<html>";
 				break;
 			case "XHTML+RDFa 1.0":
-				$ret .= '<?xml version="1.0" encoding="'.$this->_strEncodingType.'"?>'."\n";
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">';
+				$ret .= '<?xml version="1.0" encoding="'.$this->strEncodingType.'"?>'."\n";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">';
 				$ret .= '<html xmlns="http://www.w3.org/1999/xhtml"
 				    xmlns:foaf="http://xmlns.com/foaf/0.1/"
 				    xmlns:dc="http://purl.org/dc/elements/1.1/" 
-				    version="'.$this->_strDocType.'" xml:lang="'.$this->_strLanguage.'">';
+				    version="'.$this->strDocType.'" xml:lang="'.$this->strLanguage.'">';
 				break;
 			case "XHTML Basic 1.0":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\" lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\" lang=\"".$this->strLanguage."\">";
 				break;
 			case "XHTML Basic 1.1":
-				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->_strDocType.'//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\" lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//W3C//DTD '.$this->strDocType.'//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\" lang=\"".$this->strLanguage."\">";
 				break;
 			case "XHTML Mobile 1.2":
-				$ret .= '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD '.$this->_strDocType.'//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">';
-				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->_strLanguage."\">";
+				$ret .= '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD '.$this->strDocType.'//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">';
+				$ret .= "\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"".$this->strLanguage."\">";
 				break;
 			default:
 				throw new QCallerException('Unknown DocType');
@@ -545,12 +548,20 @@ class QPage extends QForm {
 	
 	protected function WriteStylesheets() {
 		$ret = '';
-		$this->strIncludedStyleSheetFileArray = $this->_arrStyleSheets;
+		
+		$this->strIncludedStyleSheetFileArray = array();
 		// Figure out initial list of StyleSheet includes
-		$strStyleSheetArray = $this->ProcessStyleSheetList('reset.css, text.css, 960.css, eratides.css');
+		
+		$strStyleSheetArray = $this->ProcessStyleSheetList($this->strStyleSheets);
 		if (!$strStyleSheetArray) {
 			$strStyleSheetArray = array();
 			$ret .= "\r\n";
+		}
+		foreach ($this->GetAllControls() as $objControl) {
+				// Include any StyleSheets?  The control would have a
+				// comma-delimited list of stylesheet files to include (if applicable)
+				if ($strScriptArray = $this->ProcessStyleSheetList($objControl->StyleSheets))
+					$strStyleSheetArray = array_merge($strStyleSheetArray, $strScriptArray);
 		}
 		// Include styles that need to be included
 		foreach ($strStyleSheetArray as $strScript) {
@@ -562,13 +573,16 @@ class QPage extends QForm {
 	
 	protected function WriteJavaScripts() {
 		$ret = '';
-		$strJavaScriptArray = $this->ProcessJavaScriptList('qcodo.js, logger.js, event.js, post.js, control.js');
-		
-		// Figure out initial list of JavaScriptIncludes
+		$this->strIncludedJavaScriptFileArray = array();
+		$strJavaScriptArray = $this->ProcessJavaScriptList($this->strJavaScripts);
+		foreach ($this->GetAllControls() as $objControl) {
+				// Include any JavaScripts?  The control would have a
+				// comma-delimited list of js files to include (if applicable)
+				if ($strScriptArray = $this->ProcessJavaScriptList($objControl->JavaScripts))
+					$strJavaScriptArray = array_merge($strJavaScriptArray, $strScriptArray);
+		}// Figure out initial list of JavaScriptIncludes
 		if (!$strJavaScriptArray)
 			$strJavaScriptArray = array();
-		$this->_arrJavaScripts = array_merge($this->_arrJavaScripts, $this->JavaScripts);
-		$this->strIncludedJavaScriptFileArray = $this->_arrJavaScripts;
 		
 		// Include javascripts that need to be included
 		foreach ($strJavaScriptArray as $strScript) {	
@@ -584,7 +598,7 @@ class QPage extends QForm {
 	
 	protected function WriteMetaTags() {
 		$ret = '';
-		$ret .= '<meta name="Description" content="'.$this->_strDescription.'" />'."\r\n";
+		$ret .= '<meta name="Description" content="'.$this->strDescription.'" />'."\r\n";
 		return $ret;
 	}
 	
