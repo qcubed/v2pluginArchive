@@ -4,7 +4,7 @@ $objPlugin = new QPlugin();
 $objPlugin->strName = "QFCKEditor";
 $objPlugin->strDescription = 'Rich-text, WYSIWYG editor for QCubed - a plugin that bridges QCubed and
 	FCKEditor together. Use it anywhere you would use an HTML text area / multiline QTextBox.';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.11";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "tronics"; // Restructured into a plugin by alex94040
 

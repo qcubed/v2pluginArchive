@@ -178,8 +178,8 @@
 			}
 		}
 
-		public function GetAttributes() {
-			$strToReturn = parent::GetAttributes();
+		public function GetAttributes($blnIncludeCustom = true, $blnIncludeAction = true) {
+			$strToReturn = parent::GetAttributes($blnIncludeCustom, $blnIncludeAction);
 			if ($this->strTextMode == QFCKeditorTextMode::Plain) {
 				if (!$this->blnWrap)
 					$strToReturn .= 'wrap="false" ';
