@@ -10,9 +10,11 @@
  *
  * @author Steven Warren
  * @copyright 2009
- * @version 1.0
+ * @version 1.1
  * @access public
  * @package controls
+ * 
+ * Added fix when adding flashVars the variable name was missing double quotes.
  *
  * @property integer Width sets width property of the Flash file
  * @property string Height sets Height property of the Flash file
@@ -29,8 +31,7 @@ class QSwfObject extends QControl
     private $strSwfUrl;
     private $strVersion = '9.0.0';
     private $bolExpressInstallSwfurl = 'false';
-    private $strMessage =
-        'The <a href="http://www.macromedia.com/go/getflashplayer">Flash Player</a> and <a href="http://www.mozilla.com/firefox/">a browser with Javascript support</a> are needed..';
+    private $strMessage = 'The <a href="http://www.macromedia.com/go/getflashplayer">Flash Player</a> and <a href="http://www.mozilla.com/firefox/">a browser with Javascript support</a> are needed..';
 
     private $intId;
     private $strJs;
@@ -81,16 +82,11 @@ class QSwfObject extends QControl
         $this->arrAttributes = (is_array($this->arrAttributes)) ? $this->arrAttributes :
             array();
 
-        $this->strEmbedSWF = 'swfobject.embedSWF("' . $this->strSwfUrl . '", "' . $this->
-            strControlId . '", "' . $this->intWidth . '", "' . $this->intHeight . '", "' . $this->
-            strVersion . '", ' . $this->bolExpressInstallSwfurl .
-            ', this.flashvars, this.params , this.attr );' . "\n";
+        $this->strEmbedSWF = 'swfobject.embedSWF("' . $this->strSwfUrl . '", "' . $this->strControlId . '", "' . $this->intWidth . '", "' . $this->intHeight . '", "' . $this->strVersion . '", ' . $this->bolExpressInstallSwfurl . ', this.flashvars, this.params , this.attr );' . "\n";
 
 
         // Return the HTML.
-        return sprintf('<div class="%s" id="%s" style="width:%spx; height:%spx;">%s</div>',
-            $this->classname, $this->strControlId, $this->intWidth, $this->intHeight, $this->
-            strMessage);
+        return sprintf('<div class="%s" id="%s" style="width:%spx; height:%spx;">%s</div>', $this->classname, $this->strControlId, $this->intWidth, $this->intHeight, $this->strMessage);
 
     }
 
@@ -275,7 +271,8 @@ class QSwfObject extends QControl
             foreach ($params as $key => $value) {
                 if (!empty($list))
                     $list .= ",";
-                $list .= "\n\t\t" . $key . ' : ' . '"' . $value . '"';
+                $list .= "\n\t\t";
+                $list .= sprintf('"%s" : "%s"', $key, $value );
             }
         }
         $js = "\t" . $name . ' : {' . $list . '}';
