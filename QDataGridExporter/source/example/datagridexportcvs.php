@@ -46,7 +46,6 @@
 // now you can choose to download all (default) or only page (uncomment next line)
 	       //$this->btnCVS->blnDowload_all=false;
 
-
 			// Make the DataGrid look nice
 			$objStyle = $this->dtgPersons->RowStyle;
 			$objStyle->FontSize = 12;

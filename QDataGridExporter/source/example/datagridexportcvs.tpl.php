@@ -2,9 +2,14 @@
 	<?php $this->RenderBegin(); ?>
 
 	<div class="instructions">
-		<h1 class="instruction_title">An Introduction to the QDataGridExportCVS Class</h1>
+		<h1 class="instruction_title">An Introduction to the QDataGridExporter Class</h1>
 		
-		You now can add a button that export the datagrid content (all rows) to cvs.
+		Using this plugin you can add button that export the datagrid content to cvs.<br>
+		               <i> At this level inside a Button you can put only text (now: download CVS)!!</i> 
+		<br><br> 
+		Setting   blnDowload_all  you can instruct the button to <br> 
+		 - DOWNLOAD_ENTIRE_GRID (true) or <br>
+		 - DOWNLOAD_CURRENT_PAGE_ONLY (false). <br>
 		
 	</div>
           <?php $this->btnCVS->Render(); ?>  
