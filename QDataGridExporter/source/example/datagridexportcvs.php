@@ -43,6 +43,8 @@
 // to activate the plugin
                $this->btnCVS = new QDataGridExporter($this, $this->dtgPersons);
 
+// now you can choose to download all (default) or only page (uncomment next line)
+	       //$this->btnCVS->blnDowload_all=false;
 
 
 			// Make the DataGrid look nice
