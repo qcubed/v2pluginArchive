@@ -1,16 +1,20 @@
 <?php
 /*
-From to muse  inspiring me..... (Alex)
+From ...muse...inspiring me..... (Alex)
 I thoght you would write a class like this for your plugin:
-class DataGridExporter extens QButton {
-	  public __construct ($objParentObject, QDataGrid $objGrid, $objId) {
-		....
+class DataGridExporterButton extends QButton {
+	public __construct ($objParentObject, QDataGrid $objGrid, $objId) {
+
 	 }
 }
 What I mean here is that the plugin you'd write would be a special kind of button,
 that can be rendered separately from the datagrid.
 When created, that button would require a pointer to the QDataGrid that has to be exported.
-When the button is clicked, the user gets to download the contents of the datagrid as a CSV file.
+When the button is clicked, the user gets to download the contents of the datagrid as a CSV file
+
+Option attribute to export datagrid :
+	blnDownload_all 	ENTIRE_DATAGRID (default) or CURRENT_PAGE.
+	Button Text 		test presence of  CVS (default) or XLS to format download as required.
 */
 
 class QDataGridExporterButton extends QButton {
@@ -159,7 +163,7 @@ class QDataGridExporterButton extends QButton {
 				break;
 			} //end case download xls
 
-			default:  // CVS
+			default:	// CVS
 			{				// Get header names
 				$header = array();
 				foreach($columns as $column){
@@ -211,6 +215,7 @@ class QDataGridExporterButton extends QButton {
 	protected function format_XLS_head()
 	{
 		$result = "\n";
+		// space present only to render xml stucture idented
 		$result .= '<!--[if gte mso 9]><xml>
 				 <x:ExcelWorkbook>
 				  <x:ExcelWorksheets>

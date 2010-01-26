@@ -6,7 +6,7 @@
 		// Declare the DataGrid
 		protected $dtgPersons;
 // Button to download CVS
-          protected $btnCVS;
+		protected $btnCVS;
 //
 
 		protected function Form_Create() {
@@ -27,7 +27,7 @@
 			$this->dtgPersons->ItemsPerPage = 5;
 
 // do not show filter
-               $this->dtgPersons->ShowFilter = false;
+			$this->dtgPersons->ShowFilter = false;
 
 			// Use the MetaDataGrid functionality to add Columns for this datagrid
 
