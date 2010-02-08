@@ -1,4 +1,4 @@
-<?
+<?php
 	/*********************************************************
 	
 	PhoneTextBox
@@ -22,7 +22,7 @@
 	$txtBox->Name = 'Home Phone';
 	$txtBox->Text = $this->objPeople->HomePhone;
 	
-	
+	02-08-2010 Changed php  short tag tp "<?php" (Allegro)
 	**********************************************************/
 	
 	
