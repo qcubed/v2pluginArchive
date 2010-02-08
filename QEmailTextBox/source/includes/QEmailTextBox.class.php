@@ -1,9 +1,11 @@
-<?
+<?php
 	/*********************************************************	
 	QEmailTextBox		
 	A subclass of QTextBox. 
 	Contributors:	enzo	
-	This text box validates  method overridden -- Validate will also ensure that the Text is a valid email address		
+	This text box validates  method overridden -- Validate will also ensure that the Text is a valid email address
+	
+	02-08-2010 changed short tag to <?php to fix break in some installations (Allegro)
 	**********************************************************/
 	
 	
