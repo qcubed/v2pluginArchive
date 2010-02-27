@@ -138,16 +138,15 @@
 			$this->blnModified = true;
 		}
 
-  /**
-    Override Focus() event because autocomplete is called with jquery document.onready, but focus is called using qc javascript function getW.
-  */
-
+  	/**
+	    Override Focus() event because autocomplete is called with jquery document.onready, 
+	    but focus is called using qc javascript function getW.
+	  */
     public function Focus() {
       QApplication::ExecuteJavascript(sprintf('jQuery(document).ready(
          function() {
            jQuery("#%s").focus(); });', $this->strControlId));
-    }
-    
+    }    
 	}
 	
 	/**
