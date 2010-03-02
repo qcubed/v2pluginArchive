@@ -2,28 +2,30 @@
 	<?php $this->RenderBegin(); ?>
 
 	<div class="instructions">
-		<h1 class="instruction_title">An Introduction to the QDataGridExporterButton Class</h1>
+		<h1 class="instruction_title">Exporting Datagrid contents with QDataGridExporterButton</h1>
 
-		Using this plugin you can add button that export the datagrid content to cvs or xls.<br>
-		<i> At this level inside a Button you can put only text (now: download CVS or download XLS)!!</i>
-
-<br><br>
-		To download in xls simply intruct button to do this changing his text<br>
-		 - $this->btnCVS->Text = "download XLS";
-
-		<br><br>
-		Setting   blnDowload_all  you can instruct the button to <br>
-		 - ENTIRE_DATAGRID (true) or <br>
-		 - CURRENT_PAGE (false). <br>
-		<br>
-		added a code to prevent Excel from autoconverting Item with number > 1000000000000000 to flot
-		loosing non significant digit - Item is now prefixed wih C: and treated as string by Excel.<br>
-		<i>In my app. Part number numeric (char 20) loosed 4 least significant digit so  the
-		exported Excel table was useless....<i>
-		<br>
-
+		Using this plugin you can add a button to your QForm that will let your users export data
+		from a datagrid within your web application. The exported data can be in one of the following
+		formats:
+		<ul>
+			<li>CSV: comma-separate plain text file</li>
+			<li>XLS: Microsoft Office Excel file</li>
+		</ul>
+		
+		The data that gets exported may be either:
+		<ul>
+			<li>the full contents of the datagrid, irrespective of any pagination</li>
+			<li>only the current page that the user is looking at within the datagrid</li>
+		</ul>
+		
+		Using the <b>QDataGridExporterButton</b> control is pretty easy - just create it like 
+		you 		would create any other <b>QButton</b>, but pass in a <b>QDataGrid</b> control 
+		as a parameter. Then, set the necessary parameters (ex. format of the output), and you're
+		good to go. 
 	</div>
-		<?php $this->btnCVS->Render(); ?>
+		<?php $this->btnCSV->Render(); ?>&nbsp;&nbsp;&nbsp;
+		<?php $this->btnXLS->Render(); ?>&nbsp;&nbsp;&nbsp;
+		<?php $this->btnCurPage->Render(); ?>
 
 		<?php $this->dtgPersons->Render(); ?>
 
