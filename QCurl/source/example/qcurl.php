@@ -2,8 +2,6 @@
 
 require('../../../../includes/configuration/prepend.inc.php');
 
-require(__DOCROOT__.'/NuNZ/includes/qcubed/plugins/QCurl/includes/QCurl.class.php');
-
 class ExampleForm extends QForm {
 	protected $crlControl;
 	protected $btnCurl;
