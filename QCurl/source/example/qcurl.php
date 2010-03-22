@@ -4,46 +4,48 @@ require('../../../../includes/configuration/prepend.inc.php');
 
 class ExampleForm extends QForm {
 	protected $crlControl;
-	protected $btnCurl;
+	protected $btnExecuteRequest;
 	protected $txtURL;
 	protected $txtProxy;
 	protected $lblHTTPStatus;
 	protected $lblError;
+	protected $lblResult;
 	
 	protected $strHTML = "";
 	
 	protected function Form_Create() {
-		$this->crlControl = new QCurl("www.gmail.co.nz");
+		$sampleUrl = "www.gmail.co.nz";
+		$this->crlControl = new QCurl($sampleUrl);
 	
 		$this->txtURL = new QTextBox($this);
+		$this->txtURL->Text = $sampleUrl;
+
 		$this->txtProxy = new QTextBox($this);
 		
 		$this->lblHTTPStatus = new QLabel($this);
-		$this->lblHTTPStatus->ForeColor = 'red';
-		
+		$this->lblHTTPStatus->ForeColor = 'red';		
 		
 		$this->lblError = new QLabel($this);
 		$this->lblError->ForeColor = 'red';
 		
+		$this->lblResult = new QLabel($this);		
 		
-		$this->btnCurl = new QButton($this);
-		$this->btnCurl->Text = 'Curl';
-		$this->btnCurl->AddAction(new QClickEvent(), new QServerAction('btnCurl_Click'));
-		$this->btnCurl->CausesValidation = false;
+		$this->btnExecuteRequest = new QButton($this);
+		$this->btnExecuteRequest->Text = 'Make HTTP request!';
+		$this->btnExecuteRequest->AddAction(new QClickEvent(), new QServerAction('btnExecuteRequest_Click'));
+		$this->btnExecuteRequest->CausesValidation = false;
 	}
 	
-	// Override Form Event Handlers as Needed
-	
-	protected function btnCurl_Click($strFormId, $strControlId, $strParameter) {
-		QFirebug::warn("test0");
+	protected function btnExecuteRequest_Click($strFormId, $strControlId, $strParameter) {
 		if($this->txtProxy->Text){
-			$this->crlControl->useProxy(true);
 			$this->crlControl->setProxy($this->txtProxy->Text);
 		}
-		$this->crlControl->createCurl($this->txtURL->Text);
+		$this->crlControl->setUrl($this->txtURL->Text);
+		$this->crlControl->makeHttpRequest();
+
 		$this->lblHTTPStatus->Text = $this->crlControl->getHttpStatus();
 		$this->lblError->Text = $this->crlControl->getLastError();
-		
+		$this->lblResult->Text = $this->crlControl->getResult();
 	}
 }
 
