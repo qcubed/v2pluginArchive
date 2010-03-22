@@ -16,22 +16,22 @@
 		protected $blnDisplayVariables;
 		protected $strYTickFormatter;
 		protected $strXTickFormatter;
-	    protected $intWidth;
-	    protected $intHeight;
+		protected $intWidth;
+		protected $intHeight;
 		protected $strJavaScripts;
-        protected $blnShowTooltip;
-        protected $blnGridHoverable;
-        protected $blnGridClickable;
+		protected $blnShowTooltip;
+		protected $blnGridHoverable;
+		protected $blnGridClickable;
 
 
-    	private function setJavaScripts() {
-    		$this->AddJavascriptFile(__JQUERY_BASE__);
+		private function setJavaScripts() {
+			$this->AddJavascriptFile(__JQUERY_BASE__);
 			$this->AddPluginJavascriptFile("QFlot", "jquery.flot.pack.js");
-        	
-	    	if (QApplication::IsBrowser(QBrowserType::InternetExplorer)) {
+		
+			if (QApplication::IsBrowser(QBrowserType::InternetExplorer)) {
 				$this->AddPluginCssFile("QFlot", "excanvas.pack.js");
 			}
-        }
+		}
 
 		public function AddSeries(QFlotSeries $objSeries) {
 			array_push($this->objSeriesArray, $objSeries);
@@ -63,7 +63,8 @@
 			$i=0;
 			foreach ($this->objSeriesArray as $objSeries) {
 				$j=0;
-				foreach($objSeries->DataSet as $X => $Y) {
+				$temp = $objSeries->DataSet;
+				foreach($temp as $X => $Y) {
 					if($this->blnXTimeSeries) {
 						if ($objSeries->XUseTimeStamps) {
 							$qdtTime = QDateTime::FromTimeStamp($X);
@@ -116,7 +117,8 @@
 			 
 			
 			// take a source series and create a new series that is a least squares regression of the original
-			foreach($objSourceSeries->DataSet as $X => $Y) {
+			$temp = $objSourceSeries->DataSet;
+			foreach($temp as $X => $Y) {
 				if($this->blnXTimeSeries) {
 					// if it is a timeseries, be prepared to take epoch time or time strings
 					if ($objSourceSeries->XUseTimeStamps) {
@@ -145,7 +147,8 @@
 			list($gradient,$constant) = $this->line($input);
 			
 			//now loop through source array again, creating trend series. 
-			foreach($objSourceSeries->DataSet as $X => $Y) {
+			$temp = $objSourceSeries->DataSet;
+			foreach($temp as $X => $Y) {
 				if($this->blnXTimeSeries) {
 					// if it is a timeseries, be prepared to take epoch time or time strings
 					if ($objSourceSeries->XUseTimeStamps) {
@@ -292,7 +295,8 @@
 				$strDataSet  = "\t\tdata: [\n";
 				$aryDataPoints = null;
 				
-			 	foreach($objSeries->DataSet as $X => $Y) {
+				$temp = $objSeries->DataSet;
+			 	foreach($temp as $X => $Y) {
 					if($this->blnXTimeSeries) {
 						// if it is a timeseries, be prepared to take epoch time or time strings
 						if ($objSeries->XUseTimeStamps) {

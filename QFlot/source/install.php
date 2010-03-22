@@ -2,8 +2,8 @@
 
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QFlot";
-$objPlugin->strDescription = 'Use a JavaScript-based plotting library called Flot to create nice-looking charts. Based on a jQuery.';
-$objPlugin->strVersion = "0.2";
+$objPlugin->strDescription = 'Use a JavaScript-based plotting library called Flot to create nice-looking charts. Based on jQuery.';
+$objPlugin->strVersion = "0.3";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
 $objPlugin->strAuthorEmail ="enzo [at] anexusit [dot] com";
