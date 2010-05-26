@@ -174,8 +174,10 @@ class QDataGridExporterButton extends QButton {
 		// this two lines confuse paginator an have all pages.
 		//QFirebug::log($this->intDownloadMode);
 		if($this->intDownloadMode == self::DOWNLOAD_ENTIRE_DATAGRID) {
-			$this->dtgSourceDatagrid->ItemsPerPage = 2147483647;
-			$this->dtgSourceDatagrid->PageNumber = 1;
+			if ($this->dtgSourceDatagrid->Paginator) {
+				$this->dtgSourceDatagrid->ItemsPerPage = 2147483647;
+				$this->dtgSourceDatagrid->PageNumber = 1;
+			}
 		}
 		$this->dtgSourceDatagrid->DataBind();
 
