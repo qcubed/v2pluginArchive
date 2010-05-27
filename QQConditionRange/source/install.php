@@ -3,8 +3,8 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QQConditionRange";
 $objPlugin->strDescription = 'Range query for QQuery.';
-$objPlugin->strVersion = "0.1";
-$objPlugin->strPlatformVersion = "2.0";
+$objPlugin->strVersion = "0.11";
+$objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Vardan Akopian";
 $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";
 
