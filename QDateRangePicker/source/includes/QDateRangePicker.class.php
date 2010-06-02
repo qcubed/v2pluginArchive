@@ -56,7 +56,8 @@
 			$objValue = $this->$strProp;
 			if (null === $objValue) return '';
 			if (null === $strKey) {
-				$strKey = lcfirst($strProp);
+				//$strKey = lcfirst($strProp); // lcfirst is only available in php >= 5.3
+				$strKey = strtolower(substr($strProp,0,1)).substr($strProp,1);
 			}
 
 			return $strKey . ': ' . JavaScriptHelper::toJson($objValue, $strQuote) . ', ';
