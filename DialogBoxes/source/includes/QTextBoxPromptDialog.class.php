@@ -26,7 +26,7 @@ class QTextBoxPromptDialog extends QPromptDialog {
 		$this->txtTextbox = new QTextBox($this);
 		
 		// Ajax action doesn't work for Enter actions with Firefox - have to use ServerAction
-		$this->txtTextbox->AddAction(new QEnterKeyEvent(), new QServerControlAction($this, "continue_click"));		
+		$this->txtTextbox->AddAction(new QEnterKeyEvent(), new QServerControlAction($this, "first_action_click"));		
 	}
 	
 	public function SetValue($strText) {
