@@ -156,5 +156,6 @@
 	 */
 	class QAutoCompleteTextBoxEvent extends QEvent {
 		protected $strJavaScriptEvent = '';
+		const EventName = 'autocomplete';
 	}
 ?>

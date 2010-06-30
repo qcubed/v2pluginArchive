@@ -11,6 +11,9 @@
  *
  */
 
+// Quick hack to make the plugin work with the jQuery compatibility mode. TODO: rewrite cleanly. 
+$ = $j;
+
 ;(function($) {
 	
 $.fn.extend({

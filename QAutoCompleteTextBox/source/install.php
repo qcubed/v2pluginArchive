@@ -4,7 +4,7 @@ $objPlugin = new QPlugin();
 $objPlugin->strName = "QAutoCompleteTextBox";
 $objPlugin->strDescription = 'Two implementations of auto-complete functionality: matching the user '.
 			'input against a pre-defined list, showing them the matches: server-side (Ajax)and client-side.';
-$objPlugin->strVersion = "0.11";
+$objPlugin->strVersion = "0.12";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Alex Weinstein, a.k.a. alex94040";
 $objPlugin->strAuthorEmail ="alex94040 [at] yahoo [dot] com";
