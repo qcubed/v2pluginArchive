@@ -1,6 +1,4 @@
 <?php
-	require_once 'JavaScriptHelper.class.php';
-
 	/*
 	 * @property string $MenuItemText
 	 * @property mixed $DateStart
@@ -147,11 +145,11 @@
 			}
 		}
 
-		public function toJson() {
+		public function toJsObject() {
 			$strReturn = '{';
-			$strReturn .= 'text : '.JavaScriptHelper::toJson($this->MenuItemText).', ';
-			$strReturn .= 'dateStart : '.JavaScriptHelper::toJson($this->DateStart).', ';
-			$strReturn .= 'dateEnd : '.JavaScriptHelper::toJson($this->DateEnd);
+			$strReturn .= 'text : '.JavaScriptHelper::toJsObject($this->MenuItemText).', ';
+			$strReturn .= 'dateStart : '.JavaScriptHelper::toJsObject($this->DateStart).', ';
+			$strReturn .= 'dateEnd : '.JavaScriptHelper::toJsObject($this->DateEnd);
 			$strReturn .= '}';
 			return $strReturn;
 		}

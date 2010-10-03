@@ -6,9 +6,12 @@
 	 *
 	 */
 
-	require_once 'JavaScriptHelper.class.php';
 	require_once 'QDateRangePickerPreset.class.php';
 	require_once 'QDateRangePickerPresetRange.class.php';
+
+	class QCloseEvent extends QEvent {
+		const EventName = 'close';
+	}
 
 	/*
 	 * @package Controls
@@ -29,6 +32,7 @@
 	 * @property string $JqDateFormat
 	 * @property boolean $CloseOnSelect
 	 * @property boolean $Arrows
+	 * @property QJsClosure $OnClose
 	 *
 	 */
 	class QDateRangePicker extends QPanel {
@@ -51,20 +55,22 @@
 		protected $strJqDateFormat;
 		protected $blnCloseOnSelect = false;
 		protected $blnArrows = false;
+		protected $mixOnClose = null;
 
-		private function makeJsProperty($strProp, $strKey = null, $strQuote = "'") {
+		protected static $custom_events = array(
+			'QCloseEvent' => 'OnClose',
+		);
+
+		protected function makeJsProperty($strProp, $strKey) {
 			$objValue = $this->$strProp;
-			if (null === $objValue) return '';
-			if (null === $strKey) {
-				//$strKey = lcfirst($strProp); // lcfirst is only available in php >= 5.3
-				$strKey = strtolower(substr($strProp,0,1)).substr($strProp,1);
+			if (null === $objValue) {
+				return '';
 			}
 
-			return $strKey . ': ' . JavaScriptHelper::toJson($objValue, $strQuote) . ', ';
+			return $strKey . ': ' . JavaScriptHelper::toJsObject($objValue) . ', ';
 		}
 
 		private function setJavaScripts() {
-			$this->AddJavascriptFile(__JQUERY_BASE__);
 			$this->AddPluginJavascriptFile("QDateRangePicker", "daterangepicker.jQuery.js");
 			$this->AddPluginCssFile("QDateRangePicker", "collisions.css");
 			$this->AddPluginCssFile("QDateRangePicker", "ui.daterangepicker.css");
@@ -76,36 +82,42 @@
 			$this->setJavaScripts();
 		}
 
-		public function toJson() {
-			$strJson = '{';
-			$strJson .= $this->makeJsProperty('PresetRanges');
-			$strJson .= $this->makeJsProperty('Presets');
-			$strJson .= $this->makeJsProperty('RangeStartTitle');
-			$strJson .= $this->makeJsProperty('RangeEndTitle');
-			$strJson .= $this->makeJsProperty('DoneButtonText');
-			$strJson .= $this->makeJsProperty('PrevLinkText');
-			$strJson .= $this->makeJsProperty('NextLinkText');
-			$strJson .= $this->makeJsProperty('EarliestDate');
-			$strJson .= $this->makeJsProperty('LatestDate');
-			$strJson .= $this->makeJsProperty('RangeSplitter');
+		protected function makeJqOptions() {
+			$strJson = '';
+			$strJson .= $this->makeJsProperty('PresetRanges', 'presetRanges');
+			$strJson .= $this->makeJsProperty('Presets', 'presets');
+			$strJson .= $this->makeJsProperty('RangeStartTitle', 'rangeStartTitle');
+			$strJson .= $this->makeJsProperty('RangeEndTitle', 'rangeEndTitle');
+			$strJson .= $this->makeJsProperty('DoneButtonText', 'doneButtonText');
+			$strJson .= $this->makeJsProperty('PrevLinkText', 'prevLinkText');
+			$strJson .= $this->makeJsProperty('NextLinkText', 'nextLinkText');
+			$strJson .= $this->makeJsProperty('EarliestDate', 'earliestDate');
+			$strJson .= $this->makeJsProperty('LatestDate', 'latestDate');
+			$strJson .= $this->makeJsProperty('RangeSplitter', 'rangeSplitter');
 			$strJson .= $this->makeJsProperty('JqDateFormat', 'dateFormat');
-			$strJson .= $this->makeJsProperty('CloseOnSelect');
-			$strJson .= $this->makeJsProperty('Arrows');
-			return substr($strJson, 0, -2).'}';
+			$strJson .= $this->makeJsProperty('CloseOnSelect', 'closeOnSelect');
+			$strJson .= $this->makeJsProperty('Arrows', 'arrows');
+			$strJson .= $this->makeJsProperty('OnClose', 'onClose');
+			return $strJson;
 		}
 
-		public function GetControlHtml() {
-			$strToReturn = parent::GetControlHtml();
-
-			$inputs = '#'.$this->Input->ControlId;
+		protected function getJqControlId() {
 			if ($this->SecondInput) {
-				$inputs .= ', #'.$this->SecondInput->ControlId;
+				return $this->Input->ControlId.', #'.$this->SecondInput->ControlId;
 			}
-			$strJs = sprintf('jQuery("%s").daterangepicker(', $inputs);
-			$strJs .= $this->toJson();
-			$strJs .= ')';
-			QApplication::ExecuteJavaScript($strJs);
-			return $strToReturn;
+			return $this->Input->ControlId;
+		}
+
+		protected function getJqSetupFunction() {
+			return 'daterangepicker';
+		}
+
+		public function GetControlJavaScript() {
+			return sprintf('jQuery("#%s").%s({%s})', $this->getJqControlId(), $this->getJqSetupFunction(), $this->makeJqOptions());
+		}
+
+		public function GetEndScript() {
+			return  $this->GetControlJavaScript() . '; ' . parent::GetEndScript();
 		}
 
 		public function AddPreset(QDateRangePickerPreset $preset, $strLabel = null) {
@@ -150,6 +162,54 @@
 			$this->objPresetRangesArray = null;
 		}
 
+		/**
+		 * returns the property name corresponding to the given custom event
+		 * @param QEvent $objEvent the custom event
+		 * @return the property name corresponding to $objEvent
+		 */
+		protected function getCustomEventPropertyName(QEvent $objEvent) {
+			$strEventClass = get_class($objEvent);
+			if (array_key_exists($strEventClass, QDateRangePicker::$custom_events))
+				return QDateRangePicker::$custom_events[$strEventClass];
+			return null;
+		}
+
+
+		/**
+		 * Wraps $objAction into an object (typically a QJsClosure) that can be assigned to the corresponding Event
+		 * property (e.g. OnFocus)
+		 * @param QEvent $objEvent
+		 * @param QAction $objAction
+		 * @return mixed the wrapped object
+		 */
+		protected function createEventWrapper(QEvent $objEvent, QAction $objAction) {
+			$objAction->Event = $objEvent;
+			return new QJsClosure($objAction->RenderScript($this));
+		}
+
+
+		/**
+		 * If $objEvent is one of the custom events (as determined by getCustomEventPropertyName() method)
+		 * the corresponding JQuery event is used and if needed a no-script action is added. Otherwise the normal
+		 * QCubed AddAction is performed.
+		 * @param QEvent  $objEvent
+		 * @param QAction $objAction
+		 */
+		public function AddAction($objEvent, $objAction) {
+			$strEventName = $this->getCustomEventPropertyName($objEvent);
+			if ($strEventName) {
+				$this->$strEventName = $this->createEventWrapper($objEvent, $objAction);
+				if ($objAction instanceof QAjaxAction) {
+					$objAction = new QNoScriptAjaxAction($objAction);
+					parent::AddAction($objEvent, $objAction);
+				} else if (!($objAction instanceof QJavaScriptAction)) {
+					throw new Exception('handling of "' . get_class($objAction) . '" actions with "' . get_class($objEvent) . '" events not yet implemented');
+				}
+			} else {
+				parent::AddAction($objEvent, $objAction);
+			}
+		}
+
 		/////////////////////////
 		// Public Properties: GET
 		/////////////////////////
@@ -171,6 +231,7 @@
 				case "JqDateFormat" : return $this->strJqDateFormat;
 				case "CloseOnSelect" : return $this->blnCloseOnSelect;
 				case "Arrows" : return $this->blnArrows;
+				case "OnClose" : return $this->mixOnClose;
 				default :
 					try {
 						return parent::__get($strName);
@@ -351,6 +412,20 @@
 						throw $objExc;
 					}
 				}
+
+				case 'OnClose':
+					try {
+						if ($mixValue instanceof QJavaScriptAction) {
+							/** @var QJavaScriptAction $mixValue */
+							$mixValue = new QJsClosure($mixValue->RenderScript($this));
+						}
+						$this->mixOnClose = QType::Cast($mixValue, 'QJsClosure');
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				default :
 					try {
