@@ -1,7 +1,5 @@
 <?php
-
 	class QFlot extends QControl {
-
 		protected $objSeriesArray;
 		protected $dtgDataGrid;
 		protected $strVariablesTitle;
@@ -23,13 +21,12 @@
 		protected $blnGridHoverable;
 		protected $blnGridClickable;
 
-
 		private function setJavaScripts() {
 			$this->AddJavascriptFile(__JQUERY_BASE__);
 			$this->AddPluginJavascriptFile("QFlot", "jquery.flot.pack.js");
-		
+
 			if (QApplication::IsBrowser(QBrowserType::InternetExplorer)) {
-				$this->AddPluginCssFile("QFlot", "excanvas.pack.js");
+				$this->AddPluginJavascriptFile("QFlot", "excanvas.pack.js");
 			}
 		}
 
@@ -348,8 +345,6 @@
 					$aryGraphProperties[] = "$strLineOptions";
 				}
 
-
-
 				if($objSeries->Points) {
 					$aryGraphProperties[] = "\t\tpoints: { show: true }";
 				}
@@ -368,16 +363,16 @@
 			$strJS .= "\n}";
 		 	$strJS.= "
 				var i = 0;
-				$.each( " . $this->strControlId . "_datasets, function(key, val) {
+				jQuery.each( " . $this->strControlId . "_datasets, function(key, val) {
 				    val.color = i;
-				    val.shadowSize= 5;
+				    val.shadowSize = 5;
 				    ++i;
 				});";			 	
 			 	
 			    if($this->blnDisplayVariables) {
 				    $strJS.= "// insert checkboxes 
-								var choiceContainer = $(\"#" . $this->strControlId . "_variables\");\n
-								$.each(" . $this->strControlId . "_datasets, function(key, val) {
+								var choiceContainer = jQuery(\"#" . $this->strControlId . "_variables\");\n
+								jQuery.each(" . $this->strControlId . "_datasets, function(key, val) {
 								choiceContainer.append('<br/><input type=\"checkbox\" name=\"' + key + '\" checked=\"checked\" >' + val.label + '</input>');
 								});
 								choiceContainer.find(\"input\").click(plotAccordingToChoices);\n";
@@ -390,7 +385,7 @@
 			    if($this->blnDisplayVariables) {
 			    	$strJS.="
 								choiceContainer.find(\"input:checked\").each(function () {
-									var key = $(this).attr(\"name\");
+									var key = jQuery(this).attr(\"name\");
 									if (key && " . $this->strControlId . "_datasets[key])
 										data.push(" . $this->strControlId . "_datasets[key]);
 									});";
@@ -402,7 +397,7 @@
 				}
 					$strJS.= "
 								if (data.length > 0)
-									$.plot($(\"#" . $this->strControlId ."_flot\"), data, {\n";
+									jQuery.plot(jQuery(\"#" . $this->strControlId ."_flot\"), data, {\n";
 
 			$strJS.=	"\t\t\tyaxis: { ";
 		
@@ -463,7 +458,7 @@
 
             if($this->blnShowTooltip){
                 $strJS.= "function showTooltip(x, y, contents) {
-                            $('<div id=\"tooltip\">' + contents + '</div>').css( {
+                            jQuery('<div id=\"tooltip\">' + contents + '</div>').css( {
                                 position: 'absolute',
                                 display: 'none',
                                 top: y + 5,
@@ -476,13 +471,13 @@
                         }
 
                         var previousPoint = null;
-                        $(\"#" . $this->strControlId . "_flot" ."\").bind(\"plothover\", function (event, pos, item) {
+                        jQuery(\"#" . $this->strControlId . "_flot" ."\").bind(\"plothover\", function (event, pos, item) {
                             //alert('here');
                             if (item) {
                                     if (previousPoint != item.datapoint) {
                                         previousPoint = item.datapoint;
 
-                                        $(\"#tooltip\").remove();
+                                        jQuery(\"#tooltip\").remove();
                                         var x = item.datapoint[0].toFixed(2),
                                             y = item.datapoint[1].toFixed(2);
 
@@ -491,7 +486,7 @@
                                     }
                             }
                             else {
-                                $(\"#tooltip\").remove();
+                                jQuery(\"#tooltip\").remove();
                                 previousPoint = null;
                             }
                         });";
