@@ -1038,4 +1038,9 @@
 			}
 		}
 	}
+	
+	abstract class QFCKeditorTextMode {
+		const XHTML = 'XHTML';
+		const Plain = 'Plain';
+	}
 ?>
