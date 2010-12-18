@@ -14,7 +14,8 @@
 			if (parent::Validate()) {
 				if ($this->strText != "") {
 					// RegExp taken from php.net
-					if ( !eregi("^[a-z0-9]+([_\\.-][a-z0-9]+)*"."@([a-z0-9]+([\.-][a-z0-9]{1,})+)*$", $this->strText) ) {
+					
+					if ( !preg_match('/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/', $this->strText) ) {
 						$this->strValidationError = QApplication::Translate("Invalid e-mail address");
 						return false;
 					}
