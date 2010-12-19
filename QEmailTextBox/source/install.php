@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QEmailTextBox";
 $objPlugin->strDescription = 'A sublcass of QTextBox, this control validates valid emails.';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.2";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia, a.k.a. enzo";
 $objPlugin->strAuthorEmail = "enzo [at] anexusit [dot] com";
