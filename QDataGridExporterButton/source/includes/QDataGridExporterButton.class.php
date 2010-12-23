@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * @property string DownloadFormat
+ * @property string DownloadMode
+ * @property string AllowableTags
+ */
 class QDataGridExporterButton extends QButton {
 	private $dtgSourceDatagrid = array();
+	private $strAllowableTags = '';
 
 	const DOWNLOAD_ENTIRE_DATAGRID = 1;
 	const DOWNLOAD_CURRENT_PAGE = 2;
@@ -24,8 +30,32 @@ class QDataGridExporterButton extends QButton {
 	}
 
 
+	public function __get($strName)	{
+		switch ($strName) {
+			case "AllowableTags": return $this->strAllowableTags;
+			case "DownloadFormat": return $this->intExportFormat;
+			case "DownloadMode": return $this->intDownloadMode;
+			default:
+				try {
+					return parent::__get($strName);
+				} catch (QCallerException $objExc) {
+					$objExc->IncrementOffset();
+					throw $objExc;
+				}
+		}
+	}
+	
 	public function __set($strName,$mixValue)	{
 		switch ($strName) {
+			case "AllowableTags":
+				try {
+						$this->strAllowableTags = QType::Cast($mixValue, QType::String);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 			case "DownloadFormat":
 				try {
 						$this->intExportFormat = QType::Cast($mixValue, QType::Integer);
@@ -34,7 +64,7 @@ class QDataGridExporterButton extends QButton {
 						$objExc->IncrementOffset();
 						throw $objExc;
 					}
-			
+
 			case "DownloadMode":
 				try {
 						$this->intDownloadMode = QType::Cast($mixValue, QType::Integer);
@@ -43,7 +73,7 @@ class QDataGridExporterButton extends QButton {
 						$objExc->IncrementOffset();
 						throw $objExc;
 					}
-					
+
 			default:
 				try {
 					parent::__set($strName, $mixValue);
@@ -54,7 +84,7 @@ class QDataGridExporterButton extends QButton {
 				}
 		}
 	}
-	
+
 	private function streamCSV() {
 		$data = $this->dtgSourceDatagrid->DataSource;
 		$columns = $this->dtgSourceDatagrid->GetAllColumns();
@@ -127,7 +157,7 @@ class QDataGridExporterButton extends QButton {
 				$values = array();
 				foreach($columns as $column){
 					// Get the values but strip off any html tags in case we have got a button or so.
-					$tmp = strip_tags(QDataGrid::ParseHtml($column->Html,$this->dtgSourceDatagrid,$column,$item));
+					$tmp = strip_tags(QDataGrid::ParseHtml($column->Html,$this->dtgSourceDatagrid,$column,$item), $this->strAllowableTags);
 					// Excel get confused..and loose precision forcing exponential
 					// if $column content is numeric, but more than 15 character
 					$tmp = $this->excel_patch_num($tmp);
@@ -260,7 +290,8 @@ class QDataGridExporterButton extends QButton {
 		return $result;
 	}
 	
-	private function excel_patch_num($tmp){		
+	private function excel_patch_num($tmp){
+		
 		// Excel get confused..and loose precision forcing exponential
 		// if $item is numeric, but more than 15 character
 		$test = "";
@@ -274,7 +305,8 @@ class QDataGridExporterButton extends QButton {
 		else {
 			$test=$tmp;
 		}
-		return $test;	
+		return $test;
+	
 	}
 } 
 ?>
