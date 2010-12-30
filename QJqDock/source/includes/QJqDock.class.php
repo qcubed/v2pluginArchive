@@ -17,11 +17,11 @@ class QJqDock extends QPanel {
 	protected $intDistance;
 	protected $fltCoefficient;
 	
-    public function __construct($objParentObject,$strControlId = null) {
-        parent::__construct($objParentObject,$strControlId);
-		$this->AutoRenderChildren = true;
-        $this->setJavaScripts();
-    }	
+		public function __construct($objParentObject,$strControlId = null) {
+			parent::__construct($objParentObject,$strControlId);
+			$this->AutoRenderChildren = true;
+			$this->setJavaScripts();
+		}	
 
 	private function setJavaScripts() {
 		$this->AddJavascriptFile(__JQUERY_BASE__);
@@ -37,15 +37,15 @@ class QJqDock extends QPanel {
 	public function Render($blnDisplayOutput = true) {
 		$strToReturn = parent::Render($blnDisplayOutput);
 		QApplication::ExecuteJavaScript(sprintf(
-           "$(document).ready(function() {
-                    $('#%s').jqDock({
-                        align: '%s',
-                        labels: '%s',
-                        size: %s,
-                        distance: %s,
-                        coefficient: %s
-                        });
-            });"
+		 "jQuery(document).ready(function() {
+				jQuery('#%s').jqDock({
+					align: '%s',
+					labels: '%s',
+					size: %s,
+					distance: %s,
+					coefficient: %s
+					});
+			});"
 		, $this->strControlId // ID of This Control
 		, $this->strAlign // Align
 		, $this->strLabels // label orientation
