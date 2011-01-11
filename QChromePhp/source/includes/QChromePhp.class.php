@@ -57,33 +57,37 @@ class QChromePhp extends ChromePhp{
 			}
 
 			for ($intIndex = 0; $intIndex < count($objProfileArray); $intIndex++) {
-				if ((count($objProfileArray[$intIndex]) > 3) &&
-					(array_key_exists('function', $objProfileArray[$intIndex][2])) &&
-					(($objProfileArray[$intIndex][2]['function'] == 'QueryArray') ||
-					 ($objProfileArray[$intIndex][2]['function'] == 'QuerySingle') ||
-					 ($objProfileArray[$intIndex][2]['function'] == 'QueryCount')))
-					$objDebugBacktrace = $objProfileArray[$intIndex][3];
-				else {
-					$objDebugBacktrace = $objProfileArray[$intIndex][2];
+				$objProfileArray = $objDb->Profile;
+				$intCount = count($objProfileArray) / 2;
+				if ($intCount == 0) {
+					parent::log(QApplication::Translate('No queries were performed.'));
+				} else if ($intCount == 1) {
+					parent::log(QApplication::Translate('1 query was performed.'));
+				} else {
+					$log = sprintf(QApplication::Translate('%s queries were performed.'), $intCount);
+					parent::log($log);
 				}
-				
-				$intIndex++;
-				$strQuery = $objProfileArray[$intIndex];
-				
-				$objArgs =      (array_key_exists('args',       $objDebugBacktrace)) ? $objDebugBacktrace['args']       : array();
-				$strClass =     (array_key_exists('class',      $objDebugBacktrace)) ? $objDebugBacktrace['class']      : null;
-				$strType =      (array_key_exists('type',       $objDebugBacktrace)) ? $objDebugBacktrace['type']       : null;
-				$strFunction =  (array_key_exists('function',   $objDebugBacktrace)) ? $objDebugBacktrace['function']   : null;
-				$strFile =      (array_key_exists('file',       $objDebugBacktrace)) ? $objDebugBacktrace['file']       : null;
-				$strLine =      (array_key_exists('line',       $objDebugBacktrace)) ? $objDebugBacktrace['line']       : null;
-				
-				$called = QApplication::Translate('Called by') . ' ' . $strClass . $strType . $strFunction . '(' . implode(', ', $objArgs) . ')';
-				self::group($called);
-					$file = $strFile . ' ' . QApplication::Translate('Line') . ': ' . $strLine;
-					parent::log($file,QApplication::Translate('File'));
-					parent::log($strQuery,QApplication::Translate('Query'));
-				self::groupEnd();
-			}
+
+				for ($intIndex = 0; $intIndex < count($objProfileArray); $intIndex++) {
+					$objDebugBacktrace = $objProfileArray[$intIndex]['objBacktrace'];
+					$strQuery = $objProfileArray[$intIndex]['strQuery'];
+					$dblTimeInfo = $objProfileArray[$intIndex]['dblTimeInfo'];
+					
+					$objArgs =      (array_key_exists('args',       $objDebugBacktrace)) ? $objDebugBacktrace['args']       : array();
+					$strClass =     (array_key_exists('class',      $objDebugBacktrace)) ? $objDebugBacktrace['class']      : null;
+					$strType =      (array_key_exists('type',       $objDebugBacktrace)) ? $objDebugBacktrace['type']       : null;
+					$strFunction =  (array_key_exists('function',   $objDebugBacktrace)) ? $objDebugBacktrace['function']   : null;
+					$strFile =      (array_key_exists('file',       $objDebugBacktrace)) ? $objDebugBacktrace['file']       : null;
+					$strLine =      (array_key_exists('line',       $objDebugBacktrace)) ? $objDebugBacktrace['line']       : null;
+					
+					$called = QApplication::Translate('Called by') . ' ' . $strClass . $strType . $strFunction . '(' . implode(', ', $objArgs) . ')';
+					parent::group($called);
+						$file = $strFile . ' ' . QApplication::Translate('Line') . ': ' . $strLine;
+						parent::log($file,QApplication::Translate('File'));
+						parent::log($strQuery,QApplication::Translate('Query'));
+						parent::log($dblTimeInfo,QApplication::Translate('Time Info'));
+					parent::groupEnd();
+				}			}
 		} else {
 			parent::log(QApplication::Translate('Profiling was not enabled for this database connection. To enable, ensure that ENABLE_PROFILING is set to TRUE.'));
 		}
