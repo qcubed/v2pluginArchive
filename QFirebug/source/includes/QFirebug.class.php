@@ -20,18 +20,9 @@
 				}
 
 				for ($intIndex = 0; $intIndex < count($objProfileArray); $intIndex++) {
-					if ((count($objProfileArray[$intIndex]) > 3) &&
-						(array_key_exists('function', $objProfileArray[$intIndex][2])) &&
-						(($objProfileArray[$intIndex][2]['function'] == 'QueryArray') ||
-						 ($objProfileArray[$intIndex][2]['function'] == 'QuerySingle') ||
-						 ($objProfileArray[$intIndex][2]['function'] == 'QueryCount')))
-						$objDebugBacktrace = $objProfileArray[$intIndex][3];
-					else {
-						$objDebugBacktrace = $objProfileArray[$intIndex][2];
-					}
-					
-					$intIndex++;
-					$strQuery = $objProfileArray[$intIndex];
+					$objDebugBacktrace = $objProfileArray[$intIndex]['objBacktrace'];
+					$strQuery = $objProfileArray[$intIndex]['strQuery'];
+					$dblTimeInfo = $objProfileArray[$intIndex]['dblTimeInfo'];
 					
 					$objArgs =      (array_key_exists('args',       $objDebugBacktrace)) ? $objDebugBacktrace['args']       : array();
 					$strClass =     (array_key_exists('class',      $objDebugBacktrace)) ? $objDebugBacktrace['class']      : null;
@@ -45,6 +36,7 @@
 						$file = $strFile . ' ' . QApplication::Translate('Line') . ': ' . $strLine;
 						parent::log($file,QApplication::Translate('File'));
 						parent::log($strQuery,QApplication::Translate('Query'));
+						parent::log($dblTimeInfo,QApplication::Translate('Time Info'));
 					parent::groupEnd();
 				}
 			} else {
