@@ -4,7 +4,7 @@ $objPlugin = new QPlugin();
 $objPlugin->strName = "QFirebug";
 $objPlugin->strDescription = 'Plugin that eases debugging of QCubed applications through ' .
 			'integration with Firebug, an excellent Firefox extension for Javascript debugging.';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.2";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Eduardo Garcia aka enzo";
 $objPlugin->strAuthorEmail ="enzo [at] anexusit [dot] com";
