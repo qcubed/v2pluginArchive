@@ -25,8 +25,11 @@ class QTextBoxPromptDialog extends QPromptDialog {
 				
 		$this->txtTextbox = new QTextBox($this);
 		
-		// Ajax action doesn't work for Enter actions with Firefox - have to use ServerAction
-		$this->txtTextbox->AddAction(new QEnterKeyEvent(), new QServerControlAction($this, "first_action_click"));		
+		$this->txtTextbox->AddAction(new QEnterKeyEvent(), new QAjaxControlAction($this, "first_action_click"));
+		$this->txtTextbox->AddAction(new QEnterKeyEvent(), new QJavaScriptAction(
+						"		\$j(qc.getW('" . $this->strControlId . "')).dialog({close: function() {return false;}});
+								\$j(qc.getW('" . $this->strControlId . "')).dialog('close');
+								return false;"));
 	}
 	
 	public function SetValue($strText) {
@@ -44,11 +47,11 @@ class QTextBoxPromptDialog extends QPromptDialog {
 	}
 
 	public function first_action_click() {
-		$this->HideDialogBox();
+//		$this->HideDialogBox();
 		
 		// Call the parent function's callback method, and pass it, as a
 		// parameter, the new value of the textbox.
-		$this->Form->{$this->firstActionCallback}($this->txtTextbox->Text);
+		$this->objParentObject->{$this->firstActionCallback}($this->txtTextbox->Text);
 	}
 }
 ?>

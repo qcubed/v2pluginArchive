@@ -5,6 +5,9 @@ abstract class QPromptDialog extends QDialogBox {
 	// the presentation
 	protected $strIntroLabel = "Enter a value:";
 	protected $strFirstActionLabel = "Save";
+	protected $strSecondActionLabel = "Cancel";
+
+	protected $objParentObject;
 
 	protected $firstActionCallback;
 	protected $secondActionCallback;
@@ -12,6 +15,7 @@ abstract class QPromptDialog extends QDialogBox {
 	// Sadly, the controls cannot be declared protected - otherwise .tpl doesn't work.
 	public $lblPromptLabel;
 	public $lblFirstAction;
+	public $lblSecondAction;
 	
 	public $proxyFirstAction;
 	public $proxySecondAction;
@@ -19,6 +23,8 @@ abstract class QPromptDialog extends QDialogBox {
 	
 	public function __construct($objParentObject, $formFirstActionCallback, $strControlId = null) {
 		parent::__construct($objParentObject, $strControlId);
+
+		$this->objParentObject = $objParentObject;
 		
 		$this->AutoRenderChildren = false;
 		$this->MatteClickable = false;
@@ -40,6 +46,9 @@ abstract class QPromptDialog extends QDialogBox {
 		$this->lblFirstAction = new QLabel($this);
 		$this->lblFirstAction->Display = false;
 
+		$this->lblSecondAction = new QLabel($this);
+		$this->lblSecondAction->Display = false;
+
 		// The "bottom" label contains all the actionable controls (Save / Cancel "buttons" -
 		// hyperlinks with control proxies hooked up)
 		$this->lblBottom = new QLabel($this);
@@ -47,8 +56,8 @@ abstract class QPromptDialog extends QDialogBox {
 		$this->lblBottom->TagName = "center";
 		
 		// Some visual defaults, feel free to override
-		$this->Width = '210px';
-		$this->Padding = '15px';
+		$this->Width = 300;
+		$this->Padding = 15;
 	}
 	
 	public function SetIntroLabel($strText) {
@@ -58,30 +67,55 @@ abstract class QPromptDialog extends QDialogBox {
 	public function SetFirstActionLabel($strText) {
 		$this->strFirstActionLabel = $strText;
 	}
-	
+
+	public function SetSecondActionLabel($strText) {
+		$this->strSecondActionLabel = $strText;
+	}
+
 	public function SetSecondActionCallback($strFunctionName) {
 		$this->secondActionCallback = $strFunctionName;
 	}
 
+	public function GetShowDialogJavaScript() {
+		$strOptions = 'autoOpen: false';
+		$strOptions .= ', modal: '.($this->blnModal ? 'true' : 'false');
+		if ($this->strTitle)
+				$strOptions .= ', title: "'.$this->strTitle.'"';
+		if ($this->strCssClass)
+				$strOptions .= ', dialogClass: "'.$this->strCssClass.'"';
+		if (null === $this->strDialogWidth)
+				$strOptions .= ", width: 'auto'";
+		else if ($this->strDialogWidth)
+				$strOptions .= ', width: '. $this->strDialogWidth;
+		if (null === $this->strHeight)
+				$strOptions .= ", height: 'auto'";
+		else if ($this->strHeight)
+				$strOptions .= ', height: '. $this->strHeight;
+		$strParentId = $this->ParentControl ? $this->ParentControl->ControlId : $this->Form->FormId;
+		//move both the dialog and the matte back into the form, to ensure they continue to function
+		$strOptions .=	', open: function() {		$j(this).parent().appendTo("#' . $strParentId . '");'.
+										'												$j(".ui-widget-overlay").appendTo("#' . $strParentId . '"); }'.
+										", close: function() {	qc.pA('" . $this->Form->FormId . "', '" . $this->proxySecondAction->ControlId ."', ".
+										"												'QClickEvent', '', '');".
+										"												return false; }";
+
+		return sprintf('$j(qc.getW("%s")).dialog({%s}); $j(qc.getW("%s")).dialog("open");', $this->strControlId, $strOptions, $this->strControlId);
+		}
+
 	public function ShowDialogBox() {
 		$this->lblPromptLabel->Text = $this->strIntroLabel;
 		$this->lblFirstAction->Text = $this->strFirstActionLabel;
+		$this->lblSecondAction->Text = $this->strSecondActionLabel;
 		
 		$this->lblBottom->Text =
-				"<b><a href='#' onclick=\"" .
+				"<button class=\"button\" onclick=\"" .
 						"qc.pA('" . $this->Form->FormId . "', '" . $this->proxyFirstAction->ControlId . "', 'QClickEvent', '', '');
-						return false;\">" .
-								$this->lblFirstAction->Text .
-				"</a></b>" .
+						\$j(qc.getW('" . $this->strControlId . "')).dialog({close: function() {return false;}});
+						\$j(qc.getW('" . $this->strControlId . "')).dialog('close');
+						return false;\">" .  $this->lblFirstAction->Text . "</button>" .
 
-				"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" .
-
-				"<a href='#' onclick=\"" .
-						"qc.getWrapper('" . $this->ControlId . "').hideDialogBox();" .
-						"qc.pA('" . $this->Form->FormId . "', '" . $this->proxySecondAction->ControlId . "', 'QClickEvent', '', '');
-						return false\">" .
-								"Cancel" .
-				"</a>";
+				"<button class=\"button\" onclick=\"\$j(qc.getW('" . $this->strControlId . "')).dialog('close'); return false;\">".
+						$this->lblSecondAction->Text . "</button>";
 						
 		parent::ShowDialogBox();
 	}
@@ -91,10 +125,9 @@ abstract class QPromptDialog extends QDialogBox {
 	public function second_action_click() {
 		// The hosting form has the optional ability to 
 		// to privode a callback for the cancel click. 		
-		$this->HideDialogBox();
 		
 		if ($this->secondActionCallback && strlen($this->secondActionCallback) > 0) {
-			$this->Form->{$this->secondActionCallback}();
+			$this->objParentObject->{$this->secondActionCallback}();
 		}
 	}
 }

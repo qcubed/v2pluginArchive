@@ -23,6 +23,11 @@ class QRadioButtonPromptDialog extends QPromptDialog {
 		$this->strTemplate = __PLUGINS__ . "/DialogBoxes/includes/QRadioButtonPromptDialog.tpl.php";
 		
 		$this->radOptions = new QRadioButtonList($this);
+		$this->radOptions->AddAction(new QEnterKeyEvent(), new QAjaxControlAction($this, "first_action_click"));
+		$this->radOptions->AddAction(new QEnterKeyEvent(), new QJavaScriptAction(
+						"		\$j(qc.getW('" . $this->strControlId . "')).dialog({close: function() {return false;}});
+								\$j(qc.getW('" . $this->strControlId . "')).dialog('close');
+								return false;"));
 	}
 
 	/**
@@ -56,11 +61,11 @@ class QRadioButtonPromptDialog extends QPromptDialog {
 		
 	}
 	public function first_action_click() {
-			$this->HideDialogBox();
+//			$this->HideDialogBox();
 			
 			// Call the parent function's callback method, and pass it, as a
 			// parameter, the new value of the textbox.
-			$this->Form->{$this->firstActionCallback}($this->radOptions->SelectedValue);
+			$this->objParentObject->{$this->firstActionCallback}($this->radOptions->SelectedValue);
 	}
 }
 ?>

@@ -31,6 +31,8 @@
 			// from the dialog. 
 			$this->dlgConfirmationPrompt = new QConfirmationDialog($this, 'dlgConfirmation_callback_continue');
 			$this->dlgConfirmationPrompt->SetIntroLabel("Hey, are you really sure?");
+			$this->dlgConfirmationPrompt->SetFirstActionLabel("Yes!");
+			$this->dlgConfirmationPrompt->SetSecondActionLabel("no...");
 			
 			// Optionally, we can set a callback for when the user clicks Cancel in
 			// the confirmation dialog - if we don't, nothng will happen. 
@@ -49,8 +51,10 @@
 			$this->dlgTextPrompt = new QTextBoxPromptDialog($this, 'dlgTextPrompt_callback');
 			$this->dlgTextPrompt->SetIntroLabel("What's three plus five?");
 			$this->dlgTextPrompt->SetFirstActionLabel("Check my answer");
+			$this->dlgTextPrompt->SetSecondActionLabel("Abort");
 			// Optionally, we can pre-set the value of the textbox
 			$this->dlgTextPrompt->SetValue("eleven");
+			$this->dlgTextPrompt->SetSecondActionCallback("dlgTextPrompt_callback_cancel");
 			
 			// We'll use this button to trigger the confirmation dialog to pop up
 			$this->btnShowDlgTextPrompt = new QButton($this);
@@ -71,6 +75,7 @@
 			$this->dlgOptionPrompt->SetOptions($options, "ValueOfItemB");
 			$this->dlgOptionPrompt->SetIntroLabel("Pick an option from the list below - pick a good one!");
 			$this->dlgOptionPrompt->Width = 350; // override the default width
+			$this->dlgOptionPrompt->SetSecondActionCallback("dlgOptionPrompt_callback_cancel");
 
 			$this->btnShowDlgOptionPrompt = new QButton($this);
 			$this->btnShowDlgOptionPrompt->Text = "Prompt to pick an option";
@@ -96,7 +101,7 @@
 		}
 
 		public function dlgConfirmation_callback_cancel() {
-			$this->lblStatus->Text = "You clicked the button and then decided to cancel out";
+			$this->lblStatus->Text = "You clicked the button and then decided to cancel out (Confirmation prompt)";
 			$this->lblStatus->Blink();
 		}
 		
@@ -108,11 +113,21 @@
 			$this->lblStatus->Text = "3+5=" . QApplication::HtmlEntities($strInputText);
 			$this->lblStatus->Blink();
 		}
+		public function dlgTextPrompt_callback_cancel() {
+			$this->lblStatus->Text = "You clicked the button and then decided to cancel out (Text prompt)";
+			$this->lblStatus->Blink();
+		}
 		
 		public function dlgOptionPrompt_callback($mixSelectedOption) {
 			$this->lblStatus->Text = "You picked the option with value = " . QApplication::HtmlEntities($mixSelectedOption);
 			$this->lblStatus->Blink();
 		}
+
+		public function dlgOptionPrompt_callback_cancel() {
+			$this->lblStatus->Text = "You clicked the button and then decided to cancel out (Option prompt)";
+			$this->lblStatus->Blink();
+		}
+
 	}
 
 	// Run the Form we have defined

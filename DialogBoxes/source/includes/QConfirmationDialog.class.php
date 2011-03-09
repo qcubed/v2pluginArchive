@@ -14,10 +14,8 @@ class QConfirmationDialog extends QPromptDialog {
 	}
 
 	public function first_action_click() {
-		$this->HideDialogBox();
-		
 		// Call the parent function's callback method
-		$this->Form->{$this->firstActionCallback}();
+		$this->objParentObject->{$this->firstActionCallback}();
 	}
 }
 ?>
