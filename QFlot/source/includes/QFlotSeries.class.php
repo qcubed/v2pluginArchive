@@ -11,7 +11,9 @@
 		protected $blnPoints;
 		protected $blnXUseTimeStamps;
 		protected $blnYUseTimeStamps;
-		
+                protected $blnPourcentage;
+                protected $strDateSeries;
+
 		/**
 		 * Constructor for this control
 		 * @param mixed $objParentObject Parent QForm or QControl that is responsible for rendering this control
@@ -28,12 +30,14 @@
 			$this->blnPoints = false;
 			$this->blnXUseTimeStamps = false;
 			$this->blnYUseTimeStamps = false;
+                        $this->blnPourcentage = false;
+                        $this->strDateSeries=null;
 		}
-		
+
 		public function AddDataPoint($X, $Y) {
 			$this->arrDataSet[$X] = $Y;
 		}
-		
+
 		/////////////////////////
 		// Public Properties: GET
 		/////////////////////////
@@ -48,6 +52,8 @@
 				case "Points": return $this->blnPoints;
 				case "XUseTimeStamps": return $this->blnXUseTimeStamps;
 				case "YUseTimeStamps": return $this->blnYUseTimeStamps;
+                                case "Pourcentage": return $this->blnPourcentage;
+                                case "DateSeries": return $this->strDateSeries;
 				default:
 					try {
 						return parent::__get($strName);
@@ -100,7 +106,7 @@
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
-					}		
+					}
 				case "SeriesName":
 					try {
 						$this->strSeriesName = QType::Cast($mixValue, QType::String);
@@ -108,7 +114,7 @@
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
-					}			
+					}
 				case "Label":
 					try {
 						$this->strLabel = QType::Cast($mixValue, QType::String);
@@ -132,7 +138,23 @@
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
-					}		
+					}
+                                case "Pourcentage":
+					try {
+						$this->blnPourcentage = QType::Cast($mixValue, QType::Boolean);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+                                case "DateSeries":
+					try {
+						$this->strDateSeries = QType::Cast($mixValue, QType::String);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
 				default:
 					try {
 						return (parent::__set($strName, $mixValue));
