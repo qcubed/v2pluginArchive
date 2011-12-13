@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QDataGridExporterButton";
 $objPlugin->strDescription = 'Add a button to a datagrid to export its data in CVS or XLS formats.';
-$objPlugin->strVersion = "0.6";
+$objPlugin->strVersion = "0.7";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Gianni Rossini";
 $objPlugin->strAuthorEmail = "magiainformatica [at] alice [dot] it";
