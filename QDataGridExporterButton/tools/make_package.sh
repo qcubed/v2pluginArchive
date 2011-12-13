@@ -1,29 +1,18 @@
 #! /bin/bash
 
-#Copy current source to create the release
-cp -r ../source ../releases/
-cd ../releases/source
+cd $(dirname $(readlink -f $0))/../source
 
-#Remove them all at once
-find ./ -name .svn -print0 | xargs -0 rm -rf
-
-#Creating zip archive
 echo "Creating a zip archive.."
 #Format date
-date=`date +%Y-%m-%d`
+date=$(date +%Y-%m-%d)
 #Package variables
-version=`cat install.php  | grep "strVersion" | grep -oE '[0-9].[0-9]'`
-platform=`cat install.php  | grep "strPlatformVersion" | grep -oE '[0-9].[0-9]'`
-package=`cat install.php  | grep "strName" | grep -oE '\"[A-Za-z]*\"' | tr -s '"' '\0'`
+version=$(grep "strVersion" install.php | grep -oE '[0-9].[0-9]')
+platform=$(grep "strPlatformVersion" install.php | grep -oE '[0-9].[0-9]')
+package=$(grep "strName" install.php | grep -oE '\"[A-Za-z]*\"' | tr -d '"')
 
-filename=$package"_"$version"_"$platform"_"$date".zip"
-
-zip -rq ../$filename ./*
-cd ..
-
-rm -Rf source
+filename=${package}_${version}_${platform}_${date}.zip
+rm -f ../releases/$filename
+zip -x \*.svn\* \*~ \*.sh -rq ../releases/$filename .
 
 echo ""
 echo "All done, saved as $filename"
-echo ""
-read
