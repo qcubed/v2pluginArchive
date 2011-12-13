@@ -4,10 +4,12 @@
  * @property string DownloadFormat
  * @property string DownloadMode
  * @property string AllowableTags
+ * @property int[] ColumnIndexArray
  */
 class QDataGridExporterButton extends QButton {
 	private $dtgSourceDatagrid = array();
 	private $strAllowableTags = '';
+	private $intColumnIndexArray = null;
 
 	const DOWNLOAD_ENTIRE_DATAGRID = 1;
 	const DOWNLOAD_CURRENT_PAGE = 2;
@@ -35,6 +37,7 @@ class QDataGridExporterButton extends QButton {
 			case "AllowableTags": return $this->strAllowableTags;
 			case "DownloadFormat": return $this->intExportFormat;
 			case "DownloadMode": return $this->intDownloadMode;
+			case "ColumnIndexArray": return $this->intColumnIndexArray;
 			default:
 				try {
 					return parent::__get($strName);
@@ -74,6 +77,15 @@ class QDataGridExporterButton extends QButton {
 						throw $objExc;
 					}
 
+			case "ColumnIndexArray":
+				try {
+						$this->intColumnIndexArray = QType::Cast($mixValue, QType::ArrayType);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 			default:
 				try {
 					parent::__set($strName, $mixValue);
@@ -87,7 +99,7 @@ class QDataGridExporterButton extends QButton {
 
 	private function streamCSV() {
 		$data = $this->dtgSourceDatagrid->DataSource;
-		$columns = $this->dtgSourceDatagrid->GetAllColumns();
+		$columns = $this->GetColumns();
 
 		// Get header names
 		$header = array();
@@ -132,10 +144,25 @@ class QDataGridExporterButton extends QButton {
 			echo "\n";
 		}
 	}
+
+	protected function getColumns() {
+		$allColumns = $this->dtgSourceDatagrid->GetAllColumns();
+		if (is_null($this->intColumnIndexArray)) {
+			return $allColumns;
+		}
+		$columns = array();
+		$c = count($allColumns);
+		foreach ($this->intColumnIndexArray as $idx) {
+			if ($idx < 0 || $idx >= $c)
+				continue;
+			$columns[] = $allColumns[$idx];
+		}
+		return $columns;
+	}
 	
 	private function streamXLS() {
 		$data = $this->dtgSourceDatagrid->DataSource;
-		$columns = $this->dtgSourceDatagrid->GetAllColumns();
+		$columns = $this->GetColumns();
 		
 			// Get table header names
 			$theader = array();
@@ -219,7 +246,7 @@ class QDataGridExporterButton extends QButton {
 				$this->streamXLS();
 				break;
 			default: 
-				throw new QCallerException("Invalid export format: ") . $this->intExportFormat;
+				throw new QCallerException("Invalid export format: " . $this->intExportFormat);
 		}
 		
 		exit();
