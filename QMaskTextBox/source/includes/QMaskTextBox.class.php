@@ -97,7 +97,7 @@
 			if( !$this->blnVisible )return '';
 			if( !$this->blnEnabled )return '';
 			if( $this->strMask == '' )return '';
-			return sprintf('$("#%s").mask( "%s" )',
+			return sprintf('jQuery("#%s").mask( "%s" )',
 							$this->strControlId,
 							$this->strMask
 						);           
@@ -109,7 +109,7 @@
 			if( !$this->blnVisible )return '';
 			if( !$this->blnEnabled )return '';
 			$strJavaScript = $this->GetScript();
-			return "$().ready(function() {".$strJavaScript.";});";
+			return "jQuery().ready(function() {".$strJavaScript.";});";
 		}
 		/////////////////////////
 		// Public Properties: SET

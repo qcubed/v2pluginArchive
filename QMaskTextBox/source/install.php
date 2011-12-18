@@ -2,13 +2,11 @@
     $objPlugin = new QPlugin();
     // Add MetaData
     $objPlugin->strName = "QMaskTextBox"; // no spaces allowed
-    $objPlugin->strDescription = 'Adapted from QCodo (http://www.qcodo.com/wiki/file:old_downloads/qform_controls/qmaskinputtextbox_using_jquery)
-        This is a masked input plugin for the jQuery  javascript library. It allows a user to more easily 
-        enter fixed width input where you would like them to enter the data in a certain 
-        format (dates,phone numbers, etc).';
-    $objPlugin->strVersion = "0.1";
+    $objPlugin->strDescription = 'A masked input plugin, it allows a user to more easily 
+        enter fixed-format input. Supports many built-in formats (date, phone number, SSN) - as well as custom formats.';
+    $objPlugin->strVersion = "0.11";
     $objPlugin->strPlatformVersion = "1.1.2"; // version of QCubed that this plugin works well with
-    $objPlugin->strAuthorName = "Steven Warren, original work by Zeno Yu";
+    $objPlugin->strAuthorName = "Steven Warren, original work by Zeno Yu; adapted from QCodo";
     
     // Setup Files
     $files = array();
@@ -27,10 +25,9 @@
     $components = array();
     // First parameter is the path to the file, relative to the root of your plugin.
     // Second parameter is the description of the example.
-    $components[] = new QPluginExample("example/QMaskTextBoxExample.php", "allows a user to more easily enter fixed width input where you would like them to enter the data in a certain format (dates,phone numbers, etc)");
+    $components[] = new QPluginExample("example/QMaskTextBoxExample.php", "Support fixed-format text entry with QMastTextBox");
     $objPlugin->addComponents($components);
     
     // Install Plugin
     $objPlugin->install();
-    
 ?>
