@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QSlidePaginator";
 $objPlugin->strDescription = 'Alternative data grid paginator based on jQuery slider. Allows easier way to navigate between data grid pages';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.11";
 $objPlugin->strPlatformVersion = "1.1";
 $objPlugin->strAuthorName = "Sergej Dugokontov";
 $objPlugin->strAuthorEmail ="dugokontov [at] gmail [dot] com";

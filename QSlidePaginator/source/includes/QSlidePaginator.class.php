@@ -70,15 +70,15 @@ class QSlidePaginator extends QPaginatorBase {
 		
 		$strAction = str_replace('parseInt(this.value)', 'ui.values', $strAction); // prepare postback script for slider
 		
-		$strJsSlider = sprintf('$(document).ready(function(){
-				$("#slider_%s").slider({ 
+		$strJsSlider = sprintf('jQuery(document).ready(function(){
+				jQuery("#slider_%s").slider({ 
 					steps: %s,
 					minValue: %s,
 					maxValue: %s,
 					startValue: %s,
 					axis: \'%s\',
 					slide: function(e,ui) { 
-						$("#%s").val(ui.values); 
+						jQuery("#%s").val(ui.values); 
 					},
 					change: function(e,ui) { 
 						%s
