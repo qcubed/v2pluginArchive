@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2010 Craig Campbell
+ * Copyright 2011 Craig Campbell
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class ChromePhp
     /**
      * @var string
      */
-    const VERSION = '2.1.1';
+    const VERSION = '2.2.3';
 
     /**
      * @var string
@@ -47,6 +47,56 @@ class ChromePhp
      * @var string
      */
     const STORE_LOGS = 'store_logs';
+
+    /**
+     * @var string
+     */
+    const BACKTRACE_LEVEL = 'backtrace_level';
+
+    /**
+     * @var string
+     */
+    const MAX_TRANSFER = 'max_transfer';
+
+    /**
+     * @var string
+     */
+    const LOG = 'log';
+
+    /**
+     * @var string
+     */
+    const WARN = 'warn';
+
+    /**
+     * @var string
+     */
+    const ERROR = 'error';
+
+    /**
+     * @var string
+     */
+    const GROUP = 'group';
+
+    /**
+     * @var string
+     */
+    const INFO = 'info';
+
+    /**
+     * @var string
+     */
+    const GROUP_END = 'groupEnd';
+
+    /**
+     * @var string
+     */
+    const GROUP_COLLAPSED = 'groupCollapsed';
+
+    /**
+     * @var string
+     */
+    const COOKIE_SIZE_WARNING = 'cookie size of 4kb exceeded! try ChromePhp::useFile() to pull the log data from disk';
 
     /**
      * @var string
@@ -73,11 +123,6 @@ class ChromePhp
     protected $_backtraces = array();
 
     /**
-     * @var int
-     */
-    protected $_bytes_transferred = 0;
-
-    /**
      * @var bool
      */
     protected $_error_triggered = false;
@@ -88,13 +133,22 @@ class ChromePhp
     protected $_settings = array(
         self::LOG_PATH => null,
         self::URL_PATH=> null,
-        self::STORE_LOGS => false
+        self::STORE_LOGS => false,
+        self::BACKTRACE_LEVEL => 1,
+        self::MAX_TRANSFER => 3000
     );
 
     /**
      * @var ChromePhp
      */
     protected static $_instance;
+
+    /**
+     * Prevent recursion when working with objects referring to each other
+     *
+     * @var array
+     */
+    protected $_processed = array();
 
     /**
      * constructor
@@ -123,37 +177,86 @@ class ChromePhp
     /**
      * logs a variable to the console
      *
-     * @param string $key
-     * @param mixed $value
+     * @param string label
+     * @param mixed value
+     * @param string severity ChromePhp::LOG || ChromePhp::WARN || ChromePhp::ERROR
      * @return void
      */
     public static function log()
     {
-        return self::_log(func_get_args() + array('type' => ''));
+        $args = func_get_args();
+        $severity = count($args) == 3 ? array_pop($args) : '';
+
+        // save precious bytes in the cookie
+        if ($severity == self::LOG) {
+            $severity = '';
+        }
+
+        return self::_log($args + array('type' => $severity));
     }
 
     /**
      * logs a warning to the console
      *
-     * @param string $key
-     * @param mixed $value
+     * @param string label
+     * @param mixed value
      * @return void
      */
     public static function warn()
     {
-        return self::_log(func_get_args() + array('type' => 'warn'));
+        return self::_log(func_get_args() + array('type' => self::WARN));
     }
 
     /**
      * logs an error to the console
      *
-     * @param string $key
-     * @param mixed $value
+     * @param string label
+     * @param mixed value
      * @return void
      */
     public static function error()
     {
-        return self::_log(func_get_args() + array('type' => 'error'));
+        return self::_log(func_get_args() + array('type' => self::ERROR));
+    }
+
+    /**
+     * sends a group log
+     *
+     * @param string value
+     */
+    public static function group()
+    {
+        return self::_log(func_get_args() + array('type' => self::GROUP));
+    }
+
+    /**
+     * sends an info log
+     *
+     * @param string value
+     */
+    public static function info()
+    {
+        return self::_log(func_get_args() + array('type' => self::INFO));
+    }
+
+    /**
+     * sends a collapsed group log
+     *
+     * @param string value
+     */
+    public static function groupCollapsed()
+    {
+        return self::_log(func_get_args() + array('type' => self::GROUP_COLLAPSED));
+    }
+
+    /**
+     * ends a group log
+     *
+     * @param string value
+     */
+    public static function groupEnd()
+    {
+        return self::_log(func_get_args() + array('type' => self::GROUP_END));
     }
 
     /**
@@ -168,13 +271,13 @@ class ChromePhp
         unset($args['type']);
 
         // nothing passed in, don't do anything
-        if (count($args) == 0) {
+        if (count($args) == 0 && $type != self::GROUP_END) {
             return;
         }
 
         // default to single
         $label = null;
-        $value = $args[0];
+        $value = isset($args[0]) ? $args[0] : '';
 
         $logger = self::getInstance();
 
@@ -188,10 +291,16 @@ class ChromePhp
             $value = $args[1];
         }
 
+        $logger->_processed = array();
         $value = $logger->_convert($value);
 
         $backtrace = debug_backtrace(false);
-        $backtrace_message = $backtrace[1]['file'] . ' : ' . $backtrace[1]['line'];
+        $level = $logger->getSetting(self::BACKTRACE_LEVEL);
+
+        $backtrace_message = 'unknown';
+        if (isset($backtrace[$level]['file']) && isset($backtrace[$level]['line'])) {
+            $backtrace_message = $backtrace[$level]['file'] . ' : ' . $backtrace[$level]['line'];
+        }
 
         $logger->_addRow($label, $value, $backtrace_message, $type);
     }
@@ -209,6 +318,10 @@ class ChromePhp
             return $object;
         }
 
+        //Mark this object as processed so we don't convert it twice and it
+        //Also avoid recursion when objects refer to each other
+        $this->_processed[] = $object;
+
         $object_as_array = array();
 
         // first add the class name
@@ -219,8 +332,8 @@ class ChromePhp
         foreach ($object_vars as $key => $value) {
 
             // same instance as parent object
-            if ($value === $object) {
-                $value = 'recursion - parent object';
+            if ($value === $object || in_array($value, $this->_processed, true)) {
+                $value = 'recursion - parent object [' . get_class($value) . ']';
             }
             $object_as_array[$key] = $this->_convert($value);
         }
@@ -247,8 +360,8 @@ class ChromePhp
             }
 
             // same instance as parent object
-            if ($value === $object) {
-                $value = 'recursion - parent object';
+            if ($value === $object || in_array($value, $this->_processed, true)) {
+                $value = 'recursion - parent object [' . get_class($value) . ']';
             }
 
             $object_as_array[$type] = $this->_convert($value);
@@ -296,7 +409,14 @@ class ChromePhp
         }
 
         $this->_clearRows();
-        $this->_json['rows'][] = array($label, $log, $backtrace, $type);
+        $row = array($label, $log, $backtrace, $type);
+
+        // if we are in cookie mode and the row won't fit then don't add it
+        if ($this->getSetting(self::LOG_PATH) === null && !$this->_willFit($row)) {
+            return $this->_cookieMonster();
+        }
+
+        $this->_json['rows'][] = $row;
         $this->_writeCookie();
     }
 
@@ -328,29 +448,44 @@ class ChromePhp
     }
 
     /**
+     * determines if this row will fit in the cookie
+     *
+     * @param array $row
+     * @return bool
+     */
+    protected function _willFit($row)
+    {
+        $json = $this->_json;
+        $json['rows'][] = $row;
+
+        // if we don't have multibyte string length available just use regular string length
+        // this doesn't have to be perfect, just want to prevent sending more data
+        // than chrome or apache can handle in a cookie
+        $encoded_string = $this->_encode($json);
+        $size = function_exists('mb_strlen') ? mb_strlen($encoded_string) : strlen($encoded_string);
+
+        // if the size is greater than the max transfer size
+        if ($size > $this->getSetting(self::MAX_TRANSFER)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * writes the cookie
      *
      * @return bool
      */
     protected function _writeCookie()
     {
-        $json = json_encode($this->_json);
-
         // if we are going to use a file then use that
+        // here we only want to json_encode
         if ($this->getSetting(self::LOG_PATH) !== null) {
-            return $this->_writeToFile($json);
+            return $this->_writeToFile(json_encode($this->_json));
         }
 
-        // if we don't have multibyte string length available just use regular string length
-        // this doesn't have to be perfect, just want to prevent sending more data
-        // than chrome or apache can handle in a cookie
-        $this->_bytes_transferred += function_exists('mb_strlen') ? mb_strlen($json) : strlen($json);
-
-        if ($this->_bytes_transferred > 4000) {
-            return $this->_cookieMonster();
-        }
-
-        return $this->_setCookie($json);
+        return $this->_setCookie($this->_json);
     }
 
     /**
@@ -364,6 +499,17 @@ class ChromePhp
     }
 
     /**
+     * encodes the data to be sent along with the request
+     *
+     * @param array $data
+     * @return string
+     */
+    protected function _encode($data)
+    {
+        return base64_encode(utf8_encode(json_encode($data)));
+    }
+
+    /**
      * sets the main cookie
      *
      * @param array
@@ -371,10 +517,7 @@ class ChromePhp
      */
     protected function _setCookie($data)
     {
-        $data = json_encode($data);
-        $data = utf8_encode($data);
-        $data = base64_encode($data);
-        return setcookie(self::COOKIE_NAME, $data, time() + 30);
+        return setcookie(self::COOKIE_NAME, $this->_encode($data), time() + 30);
     }
 
     /**
@@ -387,6 +530,19 @@ class ChromePhp
     public function addSetting($key, $value)
     {
         $this->_settings[$key] = $value;
+    }
+
+    /**
+     * add ability to set multiple settings in one call
+     *
+     * @param array $settings
+     * @return void
+     */
+    public function addSettings(array $settings)
+    {
+        foreach ($settings as $key => $value) {
+            $this->addSetting($key, $value);
+        }
     }
 
     /**
@@ -426,15 +582,11 @@ class ChromePhp
      */
     protected function _cookieMonster()
     {
-        $this->_deleteCookie();
-
         $this->_error_triggered = true;
-        $error_text = 'cookie size of 4kb exceeded! try ChromePhp::useFile() to pull the log data from disk';
 
-        $json = $this->_json;
-        $json['rows'] = array(array(null, $error_text, '', 'warn'));
+        $this->_json['rows'][] = array(null, self::COOKIE_SIZE_WARNING, 'ChromePhp', self::WARN);
 
-        return $this->_setCookie($json);
+        return $this->_writeCookie();
     }
 
     /**
