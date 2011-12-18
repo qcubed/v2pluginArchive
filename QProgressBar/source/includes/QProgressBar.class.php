@@ -34,8 +34,8 @@
 								$this->ControlId,$this->CssClass);
 
 			$strJsProgressBar = sprintf('
-			  $(document).ready(function(){
-			    $("#pb_%s").progressBar(%s,{ 
+			  jQuery(document).ready(function(){
+			    jQuery("#pb_%s").progressBar(%s,{ 
 				      showtext: %s,
 					  barImage: "%s",
 					  boxImage: "%s",
@@ -53,7 +53,7 @@
 
 	public function Update($value) {
 		$this->fltCurrentValue = $value;
-		QApplication::ExecuteJavaScript(sprintf("$('#pb_%s').progressBar(%s);",$this->ControlId,$value));
+		QApplication::ExecuteJavaScript(sprintf("jQuery('#pb_%s').progressBar(%s);",$this->ControlId,$value));
 		return true;
 	}			
 		
@@ -71,7 +71,6 @@
 	}
 	
 	public function __set($strName, $mixValue) {
-
 		switch ($strName) {
 			case "BarImage":
 				try {
