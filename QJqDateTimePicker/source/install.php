@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QJqDateTimePicker";
 $objPlugin->strDescription = 'Date time picker control based on <a href="http://trentrichardson.com/examples/timepicker">jQuery date picker plugin</a>.';
-$objPlugin->strVersion = "0.2";
+$objPlugin->strVersion = "0.21";
 $objPlugin->strPlatformVersion = "2.0.2";
 $objPlugin->strAuthorName = "Vardan Akopian";
 $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";

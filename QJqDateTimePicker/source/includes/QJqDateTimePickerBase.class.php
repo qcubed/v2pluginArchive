@@ -118,7 +118,7 @@
 			return $strJqOptions;
 		}
 
-		protected function getJqControlId() {
+		public function getJqControlId() {
 			return $this->ControlId;
 		}
 
