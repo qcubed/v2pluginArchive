@@ -4,7 +4,7 @@ $objPlugin = new QPlugin();
 $objPlugin->strName = "QChromePhp";
 $objPlugin->strDescription = '.';
 $objPlugin->strVersion = "0.1";
-$objPlugin->strPlatformVersion = "1.1/2.0";
+$objPlugin->strPlatformVersion = "2.0";
 $objPlugin->strAuthorName = "Helge Dzierzon";
 $objPlugin->strAuthorEmail ="dochelge [at] gmail [dot] com";
 
