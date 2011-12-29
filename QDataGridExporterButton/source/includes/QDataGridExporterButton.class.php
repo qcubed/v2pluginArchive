@@ -201,6 +201,10 @@ class QDataGridExporterButton extends QButton {
 			$Html_open = str_replace("\t","", $Html_open);
 			echo $Html_open;
 
+			echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
+			echo QApplication::$EncodingType;
+			echo "\" />\n";
+
 			// Change header info
 			session_cache_limiter('must-revalidate');		// Blaine's fix for SSL & PHP Sessions
 			header("Pragma: hack"); // IE chokes on "no cache", so set to something, anything, else.
