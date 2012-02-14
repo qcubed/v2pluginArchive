@@ -18,6 +18,7 @@
 	 * @property string $NextLinkText 
 	 * @property QDateTime $EarliestDate 
 	 * @property QDateTime $LatestDate 
+	 * @property boolean $ConstrainDates 
 	 * @property string $RangeSplitter 
 	 * @property string $JqDateFormat 
 	 * @property boolean $CloseOnSelect 
@@ -46,6 +47,8 @@
 		protected $dttEarliestDate;
 		/** @var QDateTime */
 		protected $dttLatestDate;
+		/** @var boolean */
+		protected $blnConstrainDates = null;
 		/** @var string */
 		protected $strRangeSplitter;
 		/** @var string */
@@ -82,6 +85,7 @@
 			$strJqOptions .= $this->makeJsProperty('NextLinkText', 'nextLinkText');
 			$strJqOptions .= $this->makeJsProperty('EarliestDate', 'earliestDate');
 			$strJqOptions .= $this->makeJsProperty('LatestDate', 'latestDate');
+			$strJqOptions .= $this->makeJsProperty('ConstrainDates', 'constrainDates');
 			$strJqOptions .= $this->makeJsProperty('RangeSplitter', 'rangeSplitter');
 			$strJqOptions .= $this->makeJsProperty('JqDateFormat', 'dateFormat');
 			$strJqOptions .= $this->makeJsProperty('CloseOnSelect', 'closeOnSelect');
@@ -164,6 +168,7 @@
 				case 'NextLinkText': return $this->strNextLinkText;
 				case 'EarliestDate': return $this->dttEarliestDate;
 				case 'LatestDate': return $this->dttLatestDate;
+				case 'ConstrainDates': return $this->blnConstrainDates;
 				case 'RangeSplitter': return $this->strRangeSplitter;
 				case 'JqDateFormat': return $this->strJqDateFormat;
 				case 'CloseOnSelect': return $this->blnCloseOnSelect;
@@ -258,6 +263,15 @@
 				case 'LatestDate':
 					try {
 						$this->dttLatestDate = QType::Cast($mixValue, QType::DateTime);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ConstrainDates':
+					try {
+						$this->blnConstrainDates = QType::Cast($mixValue, QType::Boolean);
 						break;
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();

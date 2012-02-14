@@ -67,7 +67,7 @@ jQuery.fn.daterangepicker = function(settings){
 					rp.find('.range-end').datepicker('setDate', rp.find('.range-start').datepicker('getDate') ); 
 				}
 				
-				$(this).trigger('constrainOtherPicker');
+				jQuery(this).trigger('constrainOtherPicker');
 				
 				var rangeA = fDate( rp.find('.range-start').datepicker('getDate') );
 				var rangeB = fDate( rp.find('.range-end').datepicker('getDate') );
@@ -282,11 +282,11 @@ jQuery.fn.daterangepicker = function(settings){
 		.bind('constrainOtherPicker', function(){
 			if(options.constrainDates){
 				//constrain dates
-				if($(this).is('.range-start')){
-					rp.find('.range-end').datepicker( "option", "minDate", $(this).datepicker('getDate'));
+				if(jQuery(this).is('.range-start')){
+					rp.find('.range-end').datepicker( "option", "minDate", jQuery(this).datepicker('getDate'));
 				}
 				else{
-					rp.find('.range-start').datepicker( "option", "maxDate", $(this).datepicker('getDate'));
+					rp.find('.range-start').datepicker( "option", "maxDate", jQuery(this).datepicker('getDate'));
 				}			
 			}
 		})

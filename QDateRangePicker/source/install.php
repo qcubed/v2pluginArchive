@@ -11,7 +11,6 @@ $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";
 $components = array();
 
 $components[] = new QPluginJsFile("js/daterangepicker.jQuery.js");
-$components[] = new QPluginImageFile("images");
 $components[] = new QPluginCssFile("css");
 
 $components[] = new QPluginControlFile("includes/QDateRangePicker.class.php");
