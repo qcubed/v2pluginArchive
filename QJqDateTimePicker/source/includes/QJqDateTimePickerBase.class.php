@@ -122,7 +122,7 @@
 			return $this->ControlId;
 		}
 
-		protected function getJqSetupFunction() {
+		public function getJqSetupFunction() {
 			return 'datetimepicker';
 		}
 

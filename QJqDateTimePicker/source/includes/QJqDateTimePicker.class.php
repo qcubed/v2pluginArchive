@@ -4,6 +4,25 @@
 		protected $strDateFormat = 'MMM D, YYYY';
 		protected $strTimeFormat;
 
+		static private $mapQC2JQ = array(
+			'hhhh' => 'hh',
+			'hh' => 'h',
+			'zz' => 'TT',
+			'z' => 'tt',
+			);
+		static private $mapJQ2QC = null;
+
+		static public function qcFrmt($jqFrmt) {
+			if (!self::$mapJQ2QC) {
+				self::$mapJQ2QC = array_flip(self::$mapQC2JQ);
+			}
+			return strtr($jqFrmt, self::$mapJQ2QC);
+		}
+
+		static public function jqFrmt($qcFrmt) {
+			return strtr($qcFrmt, self::$mapQC2JQ);
+		}
+
 		protected function updateDateTimeFormat() {
 			$this->strDateTimeFormat = '';
 			if ($this->strDateFormat) {
@@ -71,7 +90,7 @@
 				case 'JqTimeFormat':
 					try {
 						$this->strJqTimeFormat = QType::Cast($mixValue, QType::String);
-						$this->strTimeFormat = $this->strJqTimeFormat; // no need for conversion since time formats match between jquery and qcodo
+						$this->strTimeFormat = self::qcFrmt($this->strJqTimeFormat);
 						$this->updateDateTimeFormat();
 						break;
 					} catch (QInvalidCastException $objExc) {
@@ -82,7 +101,7 @@
 				case 'TimeFormat':
 					try {
 						$this->strTimeFormat = QType::Cast($mixValue, QType::String);
-						$this->strJqTimeFormat = $this->strTimeFormat; // no need for conversion since time formats match between jquery and qcodo
+						$this->strJqTimeFormat = self::jqFrmt($this->strTimeFormat);
 						$this->updateDateTimeFormat();
 						break;
 					} catch (QInvalidCastException $objExc) {
