@@ -107,8 +107,14 @@ jQuery.fn.daterangepicker = function(settings){
 		if(inputDateBtemp == null){inputDateBtemp = inputDateAtemp;} 
 	}
 	else {
-		inputDateAtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[0] );
-		inputDateBtemp = Date.parse( rangeInput.val().split(options.rangeSplitter)[1] );
+		var rangeInputVal = rangeInput.val();
+		if (rangeInputVal != undefined) {
+			inputDateAtemp = Date.parse( rangeInputVal.split(options.rangeSplitter)[0] );
+			inputDateBtemp = Date.parse( rangeInputVal.split(options.rangeSplitter)[1] );
+		} else {
+			inputDateAtemp = null;
+			inputDateBtemp = null;
+		}
 		if(inputDateBtemp == null){inputDateBtemp = inputDateAtemp;} //if one date, set both
 	}
 	if(inputDateAtemp != null){inputDateA = inputDateAtemp;}
