@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QDateRangePicker";
 $objPlugin->strDescription = 'Date range picker control based on datrangepicker jQuery plugin.';
-$objPlugin->strVersion = "0.3";
+$objPlugin->strVersion = "0.4";
 $objPlugin->strPlatformVersion = "2.0.2";
 $objPlugin->strAuthorName = "Vardan Akopian";
 $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";
