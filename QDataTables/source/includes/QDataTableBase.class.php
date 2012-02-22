@@ -1,0 +1,178 @@
+<?php
+
+	/**
+	 * @property-read string $Filter
+	 * @property-read QQClause[] $Clauses
+	 * @property int $FilteredItemCount
+	 * @property int $TotalItemCount
+	 */
+	class QDataTableBase extends QDataTableGen {
+		protected $objClauses;
+		protected $strFilter;
+		protected $intEcho = null;
+		protected $intTotalItemCount = 0;
+		protected $intFilteredItemCount = 0;
+
+		public function  __construct($objParentObject, $strControlId = null) {
+			parent::__construct($objParentObject, $strControlId);
+			$this->AddJavascriptFile("../../plugins/QDataTables/DataTables-1.9.0/media/js/jquery.dataTables.min.js");
+			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables.css");
+			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables_themeroller.css");
+			$this->UseAjax = false;
+		}
+
+		public function ParsePostData() {
+			$this->objClauses = array();
+			$this->strFilter = null;
+			$this->intEcho = null;
+			// Check to see if this Control's Value was passed in via the POST data
+			if (array_key_exists('Qform__FormControl', $_POST) && ($_POST['Qform__FormControl'] == $this->strControlId)) {
+				if (isset($_REQUEST['iDisplayStart']) && $_REQUEST['iDisplayLength'] != '-1') {
+					$intOffset = QType::Cast($_REQUEST['iDisplayStart'], QType::Integer);
+					$intMaxRowCount = QType::Cast($_REQUEST['iDisplayLength'], QType::Integer);
+					$this->objClauses[] = QQ::LimitInfo($intMaxRowCount, $intOffset);
+				}
+				if (isset($_REQUEST['iSortCol_0'])) {
+					$intSortColsCount = QType::Cast($_REQUEST['iSortingCols'], QType::Integer);
+					for ($i = 0; $i < $intSortColsCount; $i++) {
+						$intSortColIdx = QType::Cast($_REQUEST['iSortCol_' . $i], QType::Integer);
+						$blnSortCol = QType::Cast($_REQUEST['bSortable_' . $intSortColIdx], QType::Boolean);
+						if ($blnSortCol) {
+							$objColumn = $this->GetColumn($intSortColIdx);
+							$strSortDir = QType::Cast($_REQUEST['sSortDir_' . $i], QType::String);
+							if (strtolower($strSortDir) == 'desc') {
+								if ($objColumn->ReverseOrderByClause) {
+									$this->objClauses[] = $objColumn->ReverseOrderByClause;
+								}
+							} else {
+								if ($objColumn->OrderByClause) {
+									$this->objClauses[] = $objColumn->OrderByClause;
+								}
+							}
+						}
+					}
+				}
+				if (isset($_REQUEST['sSearch'])) {
+					$this->strFilter = QType::Cast($_REQUEST['sSearch'], QType::String);
+				}
+				if (isset($_REQUEST['sEcho'])) {
+					$this->intEcho = QType::Cast($_REQUEST['sEcho'], QType::Integer);
+				}
+			}
+		}
+
+//		protected function GetControlHtml() {
+//			$this->DataSource = array();
+//			return parent::GetControlHtml();
+//		}
+
+		public function RenderAjax($blnDisplayOutput = true) {
+			if (!is_null($this->intEcho)) {
+				$this->DataBind();
+				$mixDataArray = array();
+				if ($this->objDataSource) {
+					foreach ($this->objDataSource as $objObject) {
+						$row = array();
+						foreach ($this->objColumnArray as $objColumn) {
+							$row[] = $objColumn->FetchCellValue($objObject);
+						}
+						$mixDataArray[] = $row;
+					}
+				}
+				$filteredCount = $this->strFilter ? $this->FilteredItemCount : $this->TotalItemCount;
+				if (!$filteredCount || $filteredCount < count($mixDataArray)) {
+					$filteredCount = count($mixDataArray);
+				}
+				$output = array(
+					"sEcho" => $this->intEcho,
+					"iTotalRecords" => $this->TotalItemCount,
+					"iTotalDisplayRecords" => $filteredCount,
+					"aaData" => $mixDataArray
+				);
+				ob_clean();
+				echo json_encode($output);
+				exit;
+			}
+			return parent::RenderAjax($blnDisplayOutput);
+		}
+
+		public function __get($strName) {
+			switch ($strName) {
+				case "Filter": return $this->strFilter;
+				case "Clauses": return $this->objClauses;
+				case "FilteredItemCount": return $this->intTotalItemCount;
+				case "TotalItemCount": return $this->intTotalItemCount;
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+		public function __set($strName, $mixValue) {
+			$this->blnModified = true;
+
+			switch ($strName) {
+				case "TotalItemCount":
+					try {
+						$this->intTotalItemCount = QType::Cast($mixValue, QType::Integer);
+						if ($this->intTotalItemCount < 0)
+							$this->intTotalItemCount = 0;
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case "FilteredItemCount":
+					try {
+						$this->intFilteredItemCount = QType::Cast($mixValue, QType::Integer);
+						if ($this->intFilteredItemCount < 0)
+							$this->intFilteredItemCount = 0;
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UseAjax':
+					parent::__set($strName, $mixValue);
+					if ($this->blnUseAjax) {
+						$this->ServerSide = true;
+						$this->ServerMethod = 'post';
+						$this->AjaxSource = $_SERVER["SCRIPT_NAME"];
+//						$strJs = sprintf("qc.pA('%s', '%s', 'QDataTable_Event', '', '')", $this->Form->FormId, $this->ControlId);
+//						$this->ServerData = new QJsClosure($strJs, array('sSource', 'aoData', 'fnCallback'));
+						$strJs = "aoData.push({'name': 'Qform__FormId', 'value': jQuery('#Qform__FormId').val()});";
+						$strJs .= "aoData.push({'name': 'Qform__FormState', 'value': jQuery('#Qform__FormState').val()});";
+						$strJs .= "aoData.push({'name': 'Qform__FormCallType', 'value': 'Ajax'});";
+						$strJs .= "aoData.push({'name': 'Qform__FormUpdates', 'value': ''});";
+						$strJs .= "aoData.push({'name': 'Qform__FormCheckableControls', 'value': ''});";
+						$strJs .= "aoData.push({'name': 'Qform__FormEvent', 'value': ''});";
+						$strJs .= sprintf("aoData.push({'name': 'Qform__FormControl', 'value': '%s'});", $this->strControlId);
+//						$strJs = 'valod(aoData);';
+						$this->ServerParams = new QJsClosure($strJs, array('aoData'));
+					} else {
+						$this->ServerSide = false;
+						$this->AjaxSource = null;
+//						$strJs = sprintf("qc.pB('%s', '%s', 'QDataTable_Event', '')", $this->Form->FormId, $this->ControlId);
+//						$this->ServerData = new QJsClosure($strJs, array('sSource', 'aoData', 'fnCallback'));
+					}
+					break;
+
+				default:
+					try {
+						parent::__set($strName, $mixValue);
+						break;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+				}
+		}
+
+	}
+
+?>
