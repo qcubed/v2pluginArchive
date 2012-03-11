@@ -11,6 +11,7 @@ $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";
 $components = array();
 
 $components[] = new QPluginJsFile("DataTables-1.9.0/media/js/jquery.dataTables.js");
+$components[] = new QPluginJsFile("DataTables-1.9.0/media/js/jquery.dataTables.min.js");
 $components[] = new QPluginCssFile("DataTables-1.9.0/media/css/jquery.dataTables.css");
 $components[] = new QPluginCssFile("DataTables-1.9.0/media/css/jquery.dataTables_themeroller.css");
 $components[] = new QPluginImageFile("DataTables-1.9.0/media/images");

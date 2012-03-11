@@ -61,11 +61,6 @@
 			}
 		}
 
-//		protected function GetControlHtml() {
-//			$this->DataSource = array();
-//			return parent::GetControlHtml();
-//		}
-
 		public function RenderAjax($blnDisplayOutput = true) {
 			if (!is_null($this->intEcho)) {
 				$this->DataBind();
@@ -89,7 +84,7 @@
 					"iTotalDisplayRecords" => $filteredCount,
 					"aaData" => $mixDataArray
 				);
-				ob_clean();
+				while(ob_get_level()) ob_end_clean();
 				echo json_encode($output);
 				exit;
 			}
@@ -143,8 +138,6 @@
 						$this->ServerSide = true;
 						$this->ServerMethod = 'post';
 						$this->AjaxSource = $_SERVER["SCRIPT_NAME"];
-//						$strJs = sprintf("qc.pA('%s', '%s', 'QDataTable_Event', '', '')", $this->Form->FormId, $this->ControlId);
-//						$this->ServerData = new QJsClosure($strJs, array('sSource', 'aoData', 'fnCallback'));
 						$strJs = "aoData.push({'name': 'Qform__FormId', 'value': jQuery('#Qform__FormId').val()});";
 						$strJs .= "aoData.push({'name': 'Qform__FormState', 'value': jQuery('#Qform__FormState').val()});";
 						$strJs .= "aoData.push({'name': 'Qform__FormCallType', 'value': 'Ajax'});";
@@ -152,13 +145,11 @@
 						$strJs .= "aoData.push({'name': 'Qform__FormCheckableControls', 'value': ''});";
 						$strJs .= "aoData.push({'name': 'Qform__FormEvent', 'value': ''});";
 						$strJs .= sprintf("aoData.push({'name': 'Qform__FormControl', 'value': '%s'});", $this->strControlId);
-//						$strJs = 'valod(aoData);';
 						$this->ServerParams = new QJsClosure($strJs, array('aoData'));
 					} else {
 						$this->ServerSide = false;
 						$this->AjaxSource = null;
-//						$strJs = sprintf("qc.pB('%s', '%s', 'QDataTable_Event', '')", $this->Form->FormId, $this->ControlId);
-//						$this->ServerData = new QJsClosure($strJs, array('sSource', 'aoData', 'fnCallback'));
+						$this->ServerParams = null;
 					}
 					break;
 
