@@ -5,6 +5,9 @@
 		/** @var QSimpleTable */
 		protected $tblPersons;
 
+		/** @var QLabel */
+		protected $lblSelection;
+
 		protected function Form_Create() {
 			// Define the DataGrid
 			$this->tblPersons = new QDataTable($this);
@@ -36,6 +39,11 @@
 			// here.  The framework will be responsible for calling your data binding method whenever the datagrid wants
 			// to render itself.
 			$this->tblPersons->SetDataBinder('tblPersons_Bind');
+
+			// Row click handling
+			$this->tblPersons->AddAction(new QDataTable_RowClickEvent(), new QAjaxAction("tableRow_Click"));
+
+			$this->lblSelection = new QLabel($this);
 		}
 
 		protected function tblPersons_Bind() {
@@ -52,6 +60,11 @@
 
 		public static function getFullName($item) {
 			return 'Full Name is "' . $item->FirstName . ' ' . $item->LastName . '"';
+		}
+
+		public function tableRow_Click($strFormId, $strControlId, $objParameter) {
+			// $objParameter is an array containing the values from the cells of the row clicked
+			$this->lblSelection->Text = $objParameter[0];
 		}
 	}
 

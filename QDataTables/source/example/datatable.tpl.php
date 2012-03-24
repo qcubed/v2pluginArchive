@@ -39,10 +39,14 @@
 </style>
 
 <div class="instructions">
-	<h1 class="instruction_title">Displaying a simple table with QSimpleTable</h1>
+	<h1 class="instruction_title">Using QDataTable</h1>
 </div>
 <div style="margin-left: 100px">
 	<?php $this->tblPersons->Render(); ?>
+</div>
+
+<div style="margin: 100px">
+	Clicked: <?php $this->lblSelection->Render(); ?>
 </div>
 
 <?php $this->RenderEnd(); ?>

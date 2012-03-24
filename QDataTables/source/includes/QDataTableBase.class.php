@@ -1,5 +1,9 @@
 <?php
 
+	class QDataTable_RowClickEvent extends QEvent {
+		const EventName = 'QDataTable_RowClickEvent';
+	}
+
 	/**
 	 * @property-read string $Filter
 	 * @property-read QQClause[] $Clauses
@@ -19,6 +23,13 @@
 			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables.css");
 			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables_themeroller.css");
 			$this->UseAjax = false;
+		}
+
+		public function AddAction($objEvent, $objAction) {
+			if ($objEvent instanceof QDataTable_RowClickEvent) {
+				$objAction = new QNoScriptAjaxAction($objAction);
+			}
+			parent::AddAction($objEvent, $objAction);
 		}
 
 		public function ParsePostData() {
@@ -89,6 +100,19 @@
 				exit;
 			}
 			return parent::RenderAjax($blnDisplayOutput);
+		}
+
+		public function GetControlJavaScript() {
+			// add row click handling
+			// use a temporary ajax action with JsReturnParam to generate the ajax script for us
+			$strJsReturnParam = sprintf("jQuery('#%s').%s().fnGetData(this)", $this->getJqControlId(), $this->getJqSetupFunction()); // 'this' is the row; fnGetData(this) returns the data for the row
+			$action = new QAjaxAction('', 'default', null, $strJsReturnParam);
+			$action->Event = new QDataTable_RowClickEvent();
+			$strJsBody = $action->RenderScript($this);
+
+			$strJS = parent::GetControlJavaScript();
+			$strJS .= ".on('click', 'tbody tr', function () { $strJsBody })";
+			return $strJS;
 		}
 
 		public function __get($strName) {
