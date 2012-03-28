@@ -18,7 +18,7 @@ rd /s /q "%%i"
 )
 
 echo Creating a zip archive..
-SET filename=%date%.zip
+SET filename=QChromephp_%date%.zip
 zip -q -r %filename% *
 mv %filename% ../
 cd ..

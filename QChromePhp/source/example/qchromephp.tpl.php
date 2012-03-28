@@ -19,18 +19,14 @@
             <br/>
             <br/>
             Button 'Test DB Profiling' shows how to use database profiling.
-            <br/>
-            <br/>
-            You may find that you get an error message complaining about a maximum cookie size of 4kb. If you need to get around that limit use the function QChromePhp::useFile().
-            Plesae find documentation for this function (section 'File Storage') at the <a href="http://www.chromephp.com">ChromePhp</a> site.
             
     </div>
 <?php
 
     
-    $this->btnAjax->Render();
-    $this->btnServer->Render();
-    $this->btnDB->Render();
+    $this->btnAjax->Render(); echo "&nbsp;&nbsp;&nbsp";
+    $this->btnServer->Render(); echo "&nbsp;&nbsp;&nbsp";
+    $this->btnDB->Render(); echo "&nbsp;&nbsp;&nbsp";
 
     $this->RenderEnd();
 ?>
