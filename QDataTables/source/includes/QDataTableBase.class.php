@@ -23,6 +23,7 @@
 			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables.css");
 			$this->AddCssFile("../../plugins/QDataTables/DataTables-1.9.0/media/css/jquery.dataTables_themeroller.css");
 			$this->UseAjax = false;
+			$this->JQueryUI = true;
 		}
 
 		public function AddAction($objEvent, $objAction) {
