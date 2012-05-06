@@ -81,7 +81,7 @@
 					foreach ($this->objDataSource as $objObject) {
 						$row = array();
 						foreach ($this->objColumnArray as $objColumn) {
-							$row[] = $objColumn->FetchCellValue($objObject);
+							$row[] = $objColumn->FetchCellValueFormatted($objObject);
 						}
 						$mixDataArray[] = $row;
 					}
