@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QDataTables";
 $objPlugin->strDescription = 'table control based on jQuery DataTables plugin.';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.2";
 $objPlugin->strPlatformVersion = "2.1";
 $objPlugin->strAuthorName = "Vardan Akopian";
 $objPlugin->strAuthorEmail = "vakopian+qcubed [at] gmail [dot] com";
@@ -12,6 +12,7 @@ $components = array();
 
 $components[] = new QPluginJsFile("DataTables-1.9.0/media/js/jquery.dataTables.js");
 $components[] = new QPluginJsFile("DataTables-1.9.0/media/js/jquery.dataTables.min.js");
+$components[] = new QPluginJsFile("DataTables-1.9.0/plugin-apis/media/js");
 $components[] = new QPluginCssFile("DataTables-1.9.0/media/css");
 $components[] = new QPluginImageFile("DataTables-1.9.0/media/images");
 

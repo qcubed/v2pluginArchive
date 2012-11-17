@@ -6,16 +6,22 @@
 
 	/**
 	 * @property-read string $Filter
+	 * @property-read QQLimitInfo $LimitInfo
 	 * @property-read QQClause[] $Clauses
 	 * @property int $FilteredItemCount
 	 * @property int $TotalItemCount
+	 * @property boolean $FilterOnReturn
+	 * @property int $FilteringDelay
 	 */
 	class QDataTableBase extends QDataTableGen {
+		protected $objLimitInfo;
 		protected $objClauses;
 		protected $strFilter;
 		protected $intEcho = null;
 		protected $intTotalItemCount = 0;
 		protected $intFilteredItemCount = 0;
+		protected $blnFilterOnReturn = false;
+		protected $intFilteringDelay = 0;
 
 		public function  __construct($objParentObject, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
@@ -42,7 +48,7 @@
 				if (isset($_REQUEST['iDisplayStart']) && $_REQUEST['iDisplayLength'] != '-1') {
 					$intOffset = QType::Cast($_REQUEST['iDisplayStart'], QType::Integer);
 					$intMaxRowCount = QType::Cast($_REQUEST['iDisplayLength'], QType::Integer);
-					$this->objClauses[] = QQ::LimitInfo($intMaxRowCount, $intOffset);
+					$this->objLimitInfo = QQ::LimitInfo($intMaxRowCount, $intOffset);
 				}
 				if (isset($_REQUEST['iSortCol_0'])) {
 					$intSortColsCount = QType::Cast($_REQUEST['iSortingCols'], QType::Integer);
@@ -116,12 +122,42 @@
 			return $strJS;
 		}
 
+		public function DataBind() {
+			if (!array_key_exists('sEcho', $_REQUEST)) {
+				$this->objDataSource = array();
+				return;
+			}
+			parent::DataBind();
+		}
+
+		public function GetEndScript() {
+			$strJs = parent::GetEndScript();
+			if ($this->blnFilterOnReturn) {
+				$this->AddJavascriptFile("../../plugins/QDataTables/DataTables-1.9.0/plugin-apis/media/js/dataTables.fnFilterOnReturn.js");
+				$strJs .= sprintf('jQuery("#%s").%s().fnFilterOnReturn(); ',
+						  $this->getJqControlId(),
+						  $this->getJqSetupFunction());
+			}
+			if ($this->intFilteringDelay > 0) {
+				$this->AddJavascriptFile("../../plugins/QDataTables/DataTables-1.9.0/plugin-apis/media/js/dataTables.fnSetFilteringDelay.js");
+				$strJs .= sprintf('jQuery("#%s").%s().fnSetFilteringDelay(%d); ',
+						  $this->getJqControlId(),
+						  $this->getJqSetupFunction(),
+						  $this->intFilteringDelay
+						  );
+			}
+			return $strJs;
+		}
+
 		public function __get($strName) {
 			switch ($strName) {
 				case "Filter": return $this->strFilter;
+				case "LimitInfo": return $this->objLimitInfo;
 				case "Clauses": return $this->objClauses;
 				case "FilteredItemCount": return $this->intTotalItemCount;
 				case "TotalItemCount": return $this->intTotalItemCount;
+				case "FilterOnReturn": return $this->blnFilterOnReturn;
+				case "FilteringDelay": return $this->intFilteringDelay;
 				default:
 					try {
 						return parent::__get($strName);
@@ -151,6 +187,24 @@
 						$this->intFilteredItemCount = QType::Cast($mixValue, QType::Integer);
 						if ($this->intFilteredItemCount < 0)
 							$this->intFilteredItemCount = 0;
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case "FilterOnReturn":
+					try {
+						$this->blnFilterOnReturn = QType::Cast($mixValue, QType::Boolean);
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case "FilteringDelay":
+					try {
+						$this->intFilteringDelay = QType::Cast($mixValue, QType::Integer);
 						break;
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();
