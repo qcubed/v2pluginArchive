@@ -60,7 +60,6 @@
 	 * @property mixed $DropdownCss Inline css that will be added to select2's dropdown container. Either an object containing css property/value key pairs or a function that returns such an object.
 	 * @property mixed $DropdownCssClass Css class that will be added to select2's dropdown container
 	 * @property QJsClosure $EscapeMarkup Function used to post-process markup returned from formatter functions. By default this function escapes html entities to prevent javascript injection.
-	 * @property QJsClosure $ 
 	 */
 
 	class QSelect2ListBoxGen extends QListBox	{
@@ -128,9 +127,7 @@
 		protected $mixDropdownCssClass;
 		/** @var QJsClosure */
 		protected $mixEscapeMarkup;
-		/** @var QJsClosure */
-		protected $mix;
-		
+
 		protected function makeJsProperty($strProp, $strKey) {
 			$objValue = $this->$strProp;
 			if (null === $objValue) {
@@ -251,8 +248,7 @@
 				case 'DropdownCss': return $this->mixDropdownCss;
 				case 'DropdownCssClass': return $this->mixDropdownCssClass;
 				case 'EscapeMarkup': return $this->mixEscapeMarkup;
-				case '': return $this->mix;
-				default: 
+				default:
 					try { 
 						return parent::__get($strName); 
 					} catch (QCallerException $objExc) { 
@@ -601,18 +597,6 @@
 						$this->mixEscapeMarkup = QType::Cast($mixValue, 'QJsClosure');
 						if ($this->Rendered) {
 							$this->CallJqUiMethod('option', 'escapeMarkup', $this->mixEscapeMarkup);
-						}
-						break;
-					} catch (QInvalidCastException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case '':
-					try {
-						$this->mix = QType::Cast($mixValue, 'QJsClosure');
-						if ($this->Rendered) {
-							$this->CallJqUiMethod('option', '', $this->mix);
 						}
 						break;
 					} catch (QInvalidCastException $objExc) {

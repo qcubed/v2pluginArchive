@@ -41,7 +41,6 @@ class Select2JqDoc extends JqDoc
         $this->options[] = new Option('DropdownCss', 'dropdownCss', 'object', '', 'Inline css that will be added to select2's dropdown container. Either an object containing css property/value key pairs or a function that returns such an object.');
         $this->options[] = new Option('DropdownCssClass', 'dropdownCssClass', 'object', '', 'Css class that will be added to select2's dropdown container ');
         $this->options[] = new Option('EscapeMarkup', 'escapeMarkup', 'function', '', 'Function used to post-process markup returned from formatter functions. By default this function escapes html entities to prevent javascript injection.');
-        $this->options[] = new Option('', '', 'function', '', '');
     }
 }
 
