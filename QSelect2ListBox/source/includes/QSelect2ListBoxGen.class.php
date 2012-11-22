@@ -170,7 +170,6 @@
 			$strJqOptions .= $this->makeJsProperty('DropdownCss', 'dropdownCss');
 			$strJqOptions .= $this->makeJsProperty('DropdownCssClass', 'dropdownCssClass');
 			$strJqOptions .= $this->makeJsProperty('EscapeMarkup', 'escapeMarkup');
-			$strJqOptions .= $this->makeJsProperty('', '');
 			if ($strJqOptions) $strJqOptions = substr($strJqOptions, 0, -2);
 			return $strJqOptions;
 		}
