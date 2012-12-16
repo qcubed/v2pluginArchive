@@ -124,7 +124,6 @@
 				case "AddSign": return $this->blnAddSign;
 				case "AddNoise": return $this->blnAddNoise;
 				case "AddBlur": return $this->blnAddBlur;
-				case "Required": return $this->blnRequired;
 				default:
 					try {
 						return parent::__get($strName);
@@ -139,14 +138,20 @@
 			$strStyle = $this->GetStyleAttributes();
 			if ($strStyle)
 				$strStyle = sprintf('style="%s"', $strStyle);
-
+			
+			// A refresh Captch Button
+			$refreshButton = new QLinkButton($this);
+			$refreshButton->Text = QApplication::Translate("Refresh CAPTCHA");
+			$refreshButton->AddAction(new QClickEvent(), new QAjaxAction($this, "Refresh"));
+			
 			switch ($this->strTextMode) {
 				case QTextMode::MultiLine:
 				case QTextMode::Password:
 				case QTextMode::SingleLine:
 				default:
-					$strToReturn = sprintf('<div class="wrapper_captcha"><img class="captcha" src="%s"><input type="text" name="%s" id="%s" value="' . $this->strFormat . '" %s%s /></div>',
+					$strToReturn = sprintf('<div class="wrapper_captcha"><img class="captcha" src="%s" alt="Security Code" /><span class="captcha-refresh">%s</span><input type="text" name="%s" id="%s" value="' . $this->strFormat . '" %s%s /></div>',
 						__PLUGIN_ASSETS__ . "/QCaptchaTextBox/captcha.php?cId=" . $this->strControlId,
+						$refreshButton->Render(false);
 						$this->strControlId,
 						$this->strControlId,
 						QApplication::HtmlEntities($this->strText),
