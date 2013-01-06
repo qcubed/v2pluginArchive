@@ -1,0 +1,102 @@
+[submodule "DialogBoxes"]
+	path = DialogBoxes
+	url = git@github.com:jamescmunro/DialogBoxes.git
+[submodule "QAnyTimeBox"]
+	path = QAnyTimeBox
+	url = git@github.com:jamescmunro/QAnyTimeBox.git
+[submodule "QAutoCompleteTextBox"]
+	path = QAutoCompleteTextBox
+	url = git@github.com:jamescmunro/QAutoCompleteTextBox.git
+[submodule "QCaptchaTextBox"]
+	path = QCaptchaTextBox
+	url = git@github.com:jamescmunro/QCaptchaTextBox.git
+[submodule "QChromePhp"]
+	path = QChromePhp
+	url = git@github.com:jamescmunro/QChromePhp.git
+[submodule "QCollapsablePanel"]
+	path = QCollapsablePanel
+	url = git@github.com:jamescmunro/QCollapsablePanel.git
+[submodule "QCurl"]
+	path = QCurl
+	url = git@github.com:jamescmunro/QCurl.git
+[submodule "QDataGridExporterButton"]
+	path = QDataGridExporterButton
+	url = git@github.com:jamescmunro/QDataGridExporterButton.git
+[submodule "QDataTables"]
+	path = QDataTables
+	url = git@github.com:jamescmunro/QDataTables.git
+[submodule "QDateRangePicker"]
+	path = QDateRangePicker
+	url = git@github.com:jamescmunro/QDateRangePicker.git
+[submodule "QEmailTextBox"]
+	path = QEmailTextBox
+	url = git@github.com:jamescmunro/QEmailTextBox.git
+[submodule "QFCKEditor"]
+	path = QFCKEditor
+	url = git@github.com:jamescmunro/QFCKEditor.git
+[submodule "QFirebug"]
+	path = QFirebug
+	url = git@github.com:jamescmunro/QFirebug.git
+[submodule "QFlot"]
+	path = QFlot
+	url = git@github.com:jamescmunro/QFlot.git
+[submodule "QGoogleMap"]
+	path = QGoogleMap
+	url = git@github.com:jamescmunro/QGoogleMap.git
+[submodule "QJqScrollTo"]
+	path = QJqScrollTo
+	url = git@github.com:jamescmunro/QJqScrollTo.git
+[submodule "QListPanel"]
+	path = QListPanel
+	url = git@github.com:jamescmunro/QListPanel.git
+[submodule "QMaskTextBox"]
+	path = QMaskTextBox
+	url = git@github.com:jamescmunro/QMaskTextBox.git
+[submodule "QObjectDiff"]
+	path = QObjectDiff
+	url = git@github.com:jamescmunro/QObjectDiff.git
+[submodule "QPage"]
+	path = QPage
+	url = git@github.com:jamescmunro/QPage.git
+[submodule "QPhoneTextBox"]
+	path = QPhoneTextBox
+	url = git@github.com:jamescmunro/QPhoneTextBox.git
+[submodule "QProgressBar"]
+	path = QProgressBar
+	url = git@github.com:jamescmunro/QProgressBar.git
+[submodule "QQConditionRange"]
+	path = QQConditionRange
+	url = git@github.com:jamescmunro/QQConditionRange.git
+[submodule "QReport"]
+	path = QReport
+	url = git@github.com:jamescmunro/QReport.git
+[submodule "QSelect2ListBox"]
+	path = QSelect2ListBox
+	url = git@github.com:jamescmunro/QSelect2ListBox.git
+[submodule "QSlidePaginator"]
+	path = QSlidePaginator
+	url = git@github.com:jamescmunro/QSlidePaginator.git
+[submodule "QSlider"]
+	path = QSlider
+	url = git@github.com:jamescmunro/QSlider.git
+[submodule "QSmsMessage"]
+	path = QSmsMessage
+	url = git@github.com:jamescmunro/QSmsMessage.git
+[submodule "QSortable"]
+	path = QSortable
+	url = git@github.com:jamescmunro/QSortable.git
+[submodule "QSwfObject"]
+	path = QSwfObject
+	url = git@github.com:jamescmunro/QSwfObject.git
+[submodule "QTabPanel"]
+	path = QTabPanel
+	url = git@github.com:jamescmunro/QTabPanel.git
+[submodule "QVisualCalendar"]
+	path = QVisualCalendar
+	url = git@github.com:jamescmunro/QVisualCalendar.git
+[submodule "QVisualEvent"]
+	path = QVisualEvent
+	url = git@github.com:jamescmunro/QVisualEvent.git
+[submodule "QXmlRpc_Client"]
+	path = QXmlRpc_Client
+	url = git@github.com:jamescmunro/QXmlRpc_Client.git
