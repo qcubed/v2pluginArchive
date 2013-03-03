@@ -1,6 +1,6 @@
 [submodule "DialogBoxes"]
 	path = DialogBoxes
-	url = git@github.com:qcubed/DialogBoxes.git
+	url = https://github.com/qcubed/DialogBoxes.git
 [submodule "QAnyTimeBox"]
 	path = QAnyTimeBox
 	url = git@github.com:qcubed/QAnyTimeBox.git
