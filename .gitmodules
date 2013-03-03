@@ -3,100 +3,100 @@
 	url = https://github.com/qcubed/DialogBoxes.git
 [submodule "QAnyTimeBox"]
 	path = QAnyTimeBox
-	url = git@github.com:qcubed/QAnyTimeBox.git
+	url = https://github.com/qcubed/QAnyTimeBox.git
 [submodule "QAutoCompleteTextBox"]
 	path = QAutoCompleteTextBox
-	url = git@github.com:qcubed/QAutoCompleteTextBox.git
+	url = https://github.com/qcubed/QAutoCompleteTextBox.git
 [submodule "QCaptchaTextBox"]
 	path = QCaptchaTextBox
-	url = git@github.com:qcubed/QCaptchaTextBox.git
+	url = https://github.com/qcubed/QCaptchaTextBox.git
 [submodule "QChromePhp"]
 	path = QChromePhp
-	url = git@github.com:qcubed/QChromePhp.git
+	url = https://github.com/qcubed/QChromePhp.git
 [submodule "QCollapsablePanel"]
 	path = QCollapsablePanel
-	url = git@github.com:qcubed/QCollapsablePanel.git
+	url = https://github.com/qcubed/QCollapsablePanel.git
 [submodule "QCurl"]
 	path = QCurl
-	url = git@github.com:qcubed/QCurl.git
+	url = https://github.com/qcubed/QCurl.git
 [submodule "QDataGridExporterButton"]
 	path = QDataGridExporterButton
-	url = git@github.com:qcubed/QDataGridExporterButton.git
+	url = https://github.com/qcubed/QDataGridExporterButton.git
 [submodule "QDataTables"]
 	path = QDataTables
-	url = git@github.com:qcubed/QDataTables.git
+	url = https://github.com/qcubed/QDataTables.git
 [submodule "QDateRangePicker"]
 	path = QDateRangePicker
-	url = git@github.com:qcubed/QDateRangePicker.git
+	url = https://github.com/qcubed/QDateRangePicker.git
 [submodule "QEmailTextBox"]
 	path = QEmailTextBox
-	url = git@github.com:qcubed/QEmailTextBox.git
+	url = https://github.com/qcubed/QEmailTextBox.git
 [submodule "QFCKEditor"]
 	path = QFCKEditor
-	url = git@github.com:qcubed/QFCKEditor.git
+	url = https://github.com/qcubed/QFCKEditor.git
 [submodule "QFirebug"]
 	path = QFirebug
-	url = git@github.com:qcubed/QFirebug.git
+	url = https://github.com/qcubed/QFirebug.git
 [submodule "QFlot"]
 	path = QFlot
-	url = git@github.com:qcubed/QFlot.git
+	url = https://github.com/qcubed/QFlot.git
 [submodule "QGoogleMap"]
 	path = QGoogleMap
-	url = git@github.com:qcubed/QGoogleMap.git
+	url = https://github.com/qcubed/QGoogleMap.git
 [submodule "QJqScrollTo"]
 	path = QJqScrollTo
-	url = git@github.com:qcubed/QJqScrollTo.git
+	url = https://github.com/qcubed/QJqScrollTo.git
 [submodule "QListPanel"]
 	path = QListPanel
-	url = git@github.com:qcubed/QListPanel.git
+	url = https://github.com/qcubed/QListPanel.git
 [submodule "QMaskTextBox"]
 	path = QMaskTextBox
-	url = git@github.com:qcubed/QMaskTextBox.git
+	url = https://github.com/qcubed/QMaskTextBox.git
 [submodule "QObjectDiff"]
 	path = QObjectDiff
-	url = git@github.com:qcubed/QObjectDiff.git
+	url = https://github.com/qcubed/QObjectDiff.git
 [submodule "QPage"]
 	path = QPage
-	url = git@github.com:qcubed/QPage.git
+	url = https://github.com/qcubed/QPage.git
 [submodule "QPhoneTextBox"]
 	path = QPhoneTextBox
-	url = git@github.com:qcubed/QPhoneTextBox.git
+	url = https://github.com/qcubed/QPhoneTextBox.git
 [submodule "QProgressBar"]
 	path = QProgressBar
-	url = git@github.com:qcubed/QProgressBar.git
+	url = https://github.com/qcubed/QProgressBar.git
 [submodule "QQConditionRange"]
 	path = QQConditionRange
-	url = git@github.com:qcubed/QQConditionRange.git
+	url = https://github.com/qcubed/QQConditionRange.git
 [submodule "QReport"]
 	path = QReport
-	url = git@github.com:qcubed/QReport.git
+	url = https://github.com/qcubed/QReport.git
 [submodule "QSelect2ListBox"]
 	path = QSelect2ListBox
-	url = git@github.com:qcubed/QSelect2ListBox.git
+	url = https://github.com/qcubed/QSelect2ListBox.git
 [submodule "QSlidePaginator"]
 	path = QSlidePaginator
-	url = git@github.com:qcubed/QSlidePaginator.git
+	url = https://github.com/qcubed/QSlidePaginator.git
 [submodule "QSlider"]
 	path = QSlider
-	url = git@github.com:qcubed/QSlider.git
+	url = https://github.com/qcubed/QSlider.git
 [submodule "QSmsMessage"]
 	path = QSmsMessage
-	url = git@github.com:qcubed/QSmsMessage.git
+	url = https://github.com/qcubed/QSmsMessage.git
 [submodule "QSortable"]
 	path = QSortable
-	url = git@github.com:qcubed/QSortable.git
+	url = https://github.com/qcubed/QSortable.git
 [submodule "QSwfObject"]
 	path = QSwfObject
-	url = git@github.com:qcubed/QSwfObject.git
+	url = https://github.com/qcubed/QSwfObject.git
 [submodule "QTabPanel"]
 	path = QTabPanel
-	url = git@github.com:qcubed/QTabPanel.git
+	url = https://github.com/qcubed/QTabPanel.git
 [submodule "QVisualCalendar"]
 	path = QVisualCalendar
-	url = git@github.com:qcubed/QVisualCalendar.git
+	url = https://github.com/qcubed/QVisualCalendar.git
 [submodule "QVisualEvent"]
 	path = QVisualEvent
-	url = git@github.com:qcubed/QVisualEvent.git
+	url = https://github.com/qcubed/QVisualEvent.git
 [submodule "QXmlRpc_Client"]
 	path = QXmlRpc_Client
-	url = git@github.com:qcubed/QXmlRpc_Client.git
+	url = https://github.com/qcubed/QXmlRpc_Client.git
