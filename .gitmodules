@@ -46,6 +46,15 @@
 [submodule "QJqScrollTo"]
 	path = QJqScrollTo
 	url = https://github.com/qcubed/QJqScrollTo.git
+[submodule "QJqSelectMenu"]
+	path = QJqSelectMenu
+	url = https://github.com/olegabr/QJqSelectMenu.git
+[submodule "QJqTextBox"]
+	path = QJqTextBox
+	url = https://github.com/olegabr/QJqTextBox.git
+[submodule "QjsTree"]
+	path = QjsTree
+	url = https://github.com/olegabr/QjsTree.git
 [submodule "QListPanel"]
 	path = QListPanel
 	url = https://github.com/qcubed/QListPanel.git
@@ -91,6 +100,9 @@
 [submodule "QTabPanel"]
 	path = QTabPanel
 	url = https://github.com/qcubed/QTabPanel.git
+[submodule "QTimeline"]
+	path = QTimeline
+	url = https://github.com/olegabr/QTimeline.git
 [submodule "QVisualCalendar"]
 	path = QVisualCalendar
 	url = https://github.com/qcubed/QVisualCalendar.git
